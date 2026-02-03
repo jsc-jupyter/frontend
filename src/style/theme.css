@@ -1,0 +1,67 @@
+/* Root variables - Default (Light) Theme */
+:root {
+  /* Colors - Primary */
+  --color-primary: #023d6b;
+  --color-primary-hover: #012d4f;
+  --color-primary-light: #d4e3f0;
+
+  /* Colors - Secondary */
+  --color-secondary: #adbde3;
+  --color-secondary-hover: #8fa5d6;
+  --color-secondary-light: #e6ebf7;
+
+  /* Colors - Tertiary */
+  --color-tertiary: #002036;
+  --color-tertiary-hover: #001524;
+  --color-tertiary-light: #b3c2d9;
+
+  /* Colors - Neutrals */
+  --color-background: #ffffff;
+  --color-surface: #ebebeb;
+  --color-surface-elevated: #f5f5f5;
+  --color-border: #d4d4d4;
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #4a4a4a;
+  --color-text-tertiary: #737373;
+
+  /* Colors - Semantic */
+  --color-success: #10b981;
+  --color-success-light: #d1fae5;
+  --color-warning: #f59e0b;
+  --color-warning-light: #fef3c7;
+  --color-error: #ef4444;
+  --color-error-light: #fee2e2;
+  --color-info: #3b82f6;
+  --color-info-light: #dbeafe;
+}
+
+[data-theme="dark"] {
+  --color-primary: #adbde3;
+  --color-primary-hover: #8fa5d6;
+  --color-primary-light: #1a2942;
+
+  --color-secondary: #023d6b;
+  --color-secondary-hover: #012d4f;
+  --color-secondary-light: #0a1929;
+
+  --color-tertiary: #001524;
+  --color-tertiary-hover: #000d1a;
+  --color-tertiary-light: #8fa5d6;
+
+  --color-background: #0d0d0d;
+  --color-surface: #1a1a1a;
+  --color-surface-elevated: #262626;
+  --color-border: #3a3a3a;
+  --color-text-primary: #f5f5f5;
+  --color-text-secondary: #d4d4d4;
+  --color-text-tertiary: #a3a3a3;
+
+  --color-success: #10b981;
+  --color-success-light: #064e3b;
+  --color-warning: #f59e0b;
+  --color-warning-light: #78350f;
+  --color-error: #ef4444;
+  --color-error-light: #7f1d1d;
+  --color-info: #3b82f6;
+  --color-info-light: #1e3a8a;
+}
