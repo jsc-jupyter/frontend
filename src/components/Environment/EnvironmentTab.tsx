@@ -16,11 +16,11 @@ const EnvironmentTab = () => {
   const configIndex = useContext(JupyterlabIDContext);
   const config = useConfigByIndex(configIndex);
   const environmentVariables = config?.environments;
+
   const addEnvironment = useAddEnvironment();
   const updateEnvironment = useUpdateEnvironment();
   const deleteEnvironment = useDeleteEnvironment();
-  console.log(environmentVariables);
-  console.log(typeof environmentVariables);
+
   if (!config) return null;
 
   const handleAddEnvironment = () => {
@@ -36,13 +36,11 @@ const EnvironmentTab = () => {
 
   const handleUpdateEnvironmentValue = (envName: string, newValue: string) => {
     updateEnvironment(config.id, envName, { value: newValue });
-    console.log(environmentVariables);
   };
 
   const handleDeleteEnvironment = (envName: string) => {
     deleteEnvironment(config.id, envName);
   };
-
   return (
     <div>
       <div
@@ -55,9 +53,9 @@ const EnvironmentTab = () => {
         <button onClick={handleAddEnvironment} />
       </div>
       {environmentVariables &&
-        environmentVariables.map((envVar, index) => (
+        environmentVariables.map((envVar) => (
           <div
-            key={index}
+            key={envVar.name}
             style={{
               display: "flex",
               justifyContent: "space-between",

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import JupyterlabCollapsibleRow from "./JupyterLabCollabsibleRow";
-import { useConfigStore } from "@/stores";
+import { useConfigStore, Environment } from "@/stores";
 
 // TODO : Refactor inline styles to CSS or styled-components
 // TODO : Better handling
@@ -16,7 +16,6 @@ const Table = () => {
     );
     // Remove first entry which is empty
     userServers.splice(0, 1);
-    const environments = [];
     for (const [id, server] of userServers) {
       addConfig!({
         id: id.toString(),
@@ -25,7 +24,12 @@ const Table = () => {
         system: server.system,
         option: server.option,
         profile: server.profile,
-        environments: environments,
+        environments: server.envvariables
+          ? (Object.entries(server.envvariables).map(([name, value]) => ({
+              name,
+              value,
+            })) as Environment[])
+          : [],
         storages: server.storages || [],
       });
     }
