@@ -93,6 +93,15 @@ export const useDeleteStorage = () => {
   return useConfigStore((state) => state.deleteStorage);
 };
 
+// Modules Operations
+export const useAddModule = () => {
+  return useConfigStore((state) => state.addModule);
+};
+
+export const useDeleteModule = () => {
+  return useConfigStore((state) => state.deleteModule);
+};
+
 // Config Bulk Operations
 export const useClearAllConfigs = () => {
   return useConfigStore((state) => state.clearAllConfigs);

@@ -4,7 +4,7 @@ import JupyterLabConfig from "./JupyterLabConfig";
 import StorageTab from "./Storage/storageTab";
 import EnvironmentTab from "./Environment/EnvironmentTab";
 import ResourcesTab from "./Resources/ResourcesTab";
-import ExtensionsTab from "./KernelsExtensions/ExtensionsTab";
+import Moduletab from "./Module/ModuleTab";
 import LogTab from "./Logs/LogTab";
 import { JupyterlabIDContext } from "../stores";
 
@@ -24,7 +24,7 @@ const JupyterLabTab = ({ configIndex }: JupyterLabTabProps) => {
         <Tabs.Trigger value="lab">Lab Config</Tabs.Trigger>
         <Tabs.Trigger value="storage">Storage</Tabs.Trigger>
         <Tabs.Trigger value="environment">Environment Variables</Tabs.Trigger>
-        <Tabs.Trigger value="extensions">Kernels and Extensions</Tabs.Trigger>
+        <Tabs.Trigger value="modules">Kernels and Extensions</Tabs.Trigger>
         <Tabs.Trigger value="resources">Ressources</Tabs.Trigger>
         <Tabs.Trigger value="logs">Logs</Tabs.Trigger>
       </Tabs.List>
@@ -41,8 +41,8 @@ const JupyterLabTab = ({ configIndex }: JupyterLabTabProps) => {
         <Tabs.Content value="resources" style={{ width: "100%" }}>
           <ResourcesTab />
         </Tabs.Content>
-        <Tabs.Content value="extensions" style={{ width: "100%" }}>
-          <ExtensionsTab />
+        <Tabs.Content value="modules" style={{ width: "100%" }}>
+          <Moduletab />
         </Tabs.Content>
         <Tabs.Content value="logs" style={{ width: "100%" }}>
           <LogTab />

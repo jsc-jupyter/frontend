@@ -49,19 +49,9 @@ export interface ConfigActions {
   ) => void;
   deleteStorage: (configId: string, storageIdentifier: number) => void;
 
-  // Extension operations
-  addExtension: (configId: string, extension: Module, type: string) => void;
-  updateExtension: (
-    configId: string,
-    extensionName: string,
-    updates: Partial<Module>,
-    type: string,
-  ) => void;
-  deleteExtension: (
-    configId: string,
-    extensionName: string,
-    type: string,
-  ) => void;
+  // Module operations
+  addModule: (configId: string, module: Module, type: string) => void;
+  deleteModule: (configId: string, moduleName: string, type: string) => void;
 
   // Bulk operationsk
   clearAllConfigs: () => void;

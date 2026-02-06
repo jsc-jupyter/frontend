@@ -116,86 +116,57 @@ export const useConfigStore = create<ConfigStore>()(
         });
       },
 
-      addExtension: (configId, extension, type) => {
+      addModule(configId, module, type) {
         set((state) => {
           const config = state.configs.find((c) => c.id === configId);
           if (config) {
             switch (type) {
               case "communities":
-                config.communities.push(extension);
+                config.communities.push(module);
                 break;
               case "extensions":
-                config.extensions.push(extension);
+                config.extensions.push(module);
                 break;
               case "kernels":
-                config.kernels.push(extension);
+                config.kernels.push(module);
                 break;
               case "proxies":
-                config.proxies.push(extension);
-                break;
-            }
-          }
-        });
-      },
-
-      updateExtension: (configId, extensionName, updates, type) => {
-        set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            let extensionArray;
-            switch (type) {
-              case "communities":
-                extensionArray = config.communities;
-                break;
-              case "extensions":
-                extensionArray = config.extensions;
-                break;
-              case "kernels":
-                extensionArray = config.kernels;
-                break;
-              case "proxies":
-                extensionArray = config.proxies;
+                config.proxies.push(module);
                 break;
               default:
-                return;
-            }
-            const extIndex = extensionArray.findIndex(
-              (e) => e.name === extensionName,
-            );
-            if (extIndex !== -1) {
-              extensionArray[extIndex] = {
-                ...extensionArray[extIndex],
-                ...updates,
-              };
+                break;
             }
           }
         });
       },
 
-      deleteExtension: (configId, extensionName, type) => {
+      deleteModule(configId, moduleName, type) {
         set((state) => {
           const config = state.configs.find((c) => c.id === configId);
           if (config) {
             switch (type) {
               case "communities":
                 config.communities = config.communities.filter(
-                  (e) => e.name !== extensionName,
+                  (m) => m.name !== moduleName,
                 );
+                console.log("after delete", config.communities);
                 break;
               case "extensions":
                 config.extensions = config.extensions.filter(
-                  (e) => e.name !== extensionName,
+                  (m) => m.name !== moduleName,
                 );
                 break;
               case "kernels":
                 config.kernels = config.kernels.filter(
-                  (e) => e.name !== extensionName,
+                  (m) => m.name !== moduleName,
                 );
                 break;
               case "proxies":
                 config.proxies = config.proxies.filter(
-                  (e) => e.name !== extensionName,
+                  (m) => m.name !== moduleName,
                 );
+                break;
+              default:
                 break;
             }
           }

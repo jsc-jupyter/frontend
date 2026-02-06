@@ -1,16 +1,42 @@
-import { Environment } from "@/stores";
+import { FrontendCollection } from "@/types/frontendCollection";
 
-const getFrontendCollection = (): any => {
-  return window.getFrontendCollection();
+const getFrontendCollection = (): FrontendCollection => {
+  const frontendCollection =
+    window.getFrontendCollection() as FrontendCollection;
+  return frontendCollection;
 };
 
-const getUserEnvironments = (configID: string): Environment[] => {
+const getConfigModules = () => {
+  const configModules = getFrontendCollection().userModules;
+  return configModules;
+};
+
+const getUserEnvironments = (configID: string) => {
   const frontendCollection = getFrontendCollection();
 
-  return (
-    (frontendCollection.decrypted_user_options[configID]
-      .envvariables as Environment[]) || []
-  );
+  return frontendCollection.decrypted_user_options[configID].envvariables || {};
 };
 
-export { getFrontendCollection, getUserEnvironments };
+const getServiceConfig = () => {
+  const serviceConfig = getFrontendCollection().serviceConfig;
+  return serviceConfig;
+};
+
+const getUserModules = (configID: string) => {
+  const frontendCollection = getFrontendCollection();
+  console.log(configID);
+  console.log(frontendCollection.decrypted_user_options);
+  // If the configID is not found, return an empty object
+  // Fill from userModules in FrontendCollection considering the defaults
+  const userModules =
+    frontendCollection.decrypted_user_options[configID]?.modules || {};
+  return userModules;
+};
+
+export {
+  getFrontendCollection,
+  getServiceConfig,
+  getConfigModules,
+  getUserEnvironments,
+  getUserModules,
+};

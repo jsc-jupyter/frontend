@@ -1,5 +1,4 @@
 import { createContext } from "react";
-
 export { useConfigStore } from "./jupyterStore";
 
 // Types
@@ -28,6 +27,8 @@ export {
   useAddStorage,
   useUpdateStorage,
   useDeleteStorage,
+  useAddModule,
+  useDeleteModule,
   useClearAllConfigs,
   useSetConfigs,
   useConfigEnvironments,

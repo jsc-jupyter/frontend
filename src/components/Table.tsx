@@ -31,6 +31,10 @@ const Table = () => {
             })) as Environment[])
           : [],
         storages: server.storages || [],
+        communities: server.communities || [],
+        extensions: server.extensions || [],
+        kernels: server.kernels || [],
+        proxies: server.proxies || [],
       });
     }
   }, []);
