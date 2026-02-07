@@ -31,10 +31,30 @@ const Table = () => {
             })) as Environment[])
           : [],
         storages: server.storages || [],
-        communities: server.communities || [],
-        extensions: server.extensions || [],
-        kernels: server.kernels || [],
-        proxies: server.proxies || [],
+        communities: server.modules?.communities
+          ? server.modules.communities.map((name) => ({
+              name,
+              version: server.module_versions?.[name]?.[0] || "",
+            }))
+          : [],
+        extensions: server.modules?.extensions
+          ? server.modules.extensions.map((name) => ({
+              name,
+              version: server.module_versions?.[name]?.[0] || "",
+            }))
+          : [],
+        kernels: server.modules?.kernels
+          ? server.modules.kernels.map((name) => ({
+              name,
+              version: server.module_versions?.[name]?.[0] || "",
+            }))
+          : [],
+        proxies: server.modules?.proxies
+          ? server.modules.proxies.map((name) => ({
+              name,
+              version: server.module_versions?.[name]?.[0] || "",
+            }))
+          : [],
       });
     }
   }, []);

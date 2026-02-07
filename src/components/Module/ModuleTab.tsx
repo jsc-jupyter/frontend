@@ -20,38 +20,44 @@ import {
 function createCheckboxes(
   section: string,
   items: any[],
+  config: any,
   onChange: (
     checked: Checkbox.CheckedState,
     id: string,
     section: string,
   ) => void,
 ): JSX.Element[] {
-  return Object.entries(items).map(([name, item]) => (
-    <div
-      key={item.name}
-      style={{ display: "flex", alignItems: "center", gap: "5px" }}
-    >
-      <Checkbox.Root
-        checked={item.checked}
-        defaultChecked={item.default}
-        onCheckedChange={(checked) => onChange(checked, name, section)}
-        id={item.name}
-        style={{
-          width: "16px",
-          height: "16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+  return Object.entries(items).map(([name, item]) => {
+    const sectionKey = section.toLowerCase();
+    const isChecked = config?.[sectionKey]?.some((m: any) => m.name === name) || false;
+    
+    return (
+      <div
+        key={item.name}
+        style={{ display: "flex", alignItems: "center", gap: "5px" }}
       >
-        <Checkbox.Indicator>
-          <CheckIcon />
-        </Checkbox.Indicator>
-      </Checkbox.Root>
-      <Label.Root htmlFor={item.name}>{item.displayName}</Label.Root>
-      <InfoCircledIcon href={item.href} />
-    </div>
-  ));
+        <Checkbox.Root
+          checked={isChecked}
+          defaultChecked={item.default}
+          onCheckedChange={(checked) => onChange(checked, name, section)}
+          id={item.name}
+          style={{
+            width: "16px",
+            height: "16px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Checkbox.Indicator>
+            <CheckIcon />
+          </Checkbox.Indicator>
+        </Checkbox.Root>
+        <Label.Root htmlFor={item.name}>{item.displayName}</Label.Root>
+        <InfoCircledIcon href={item.href} />
+      </div>
+    );
+  });
 }
 
 const ModuleTab = () => {
@@ -95,7 +101,7 @@ const ModuleTab = () => {
         <div key={section}>
           <h3>{section}</h3>
           <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-            {createCheckboxes(section, modules, onCheckboxChange)}
+            {createCheckboxes(section, modules, config, onCheckboxChange)}
           </div>
           {section == "communities" && (
             <Separator.Root
