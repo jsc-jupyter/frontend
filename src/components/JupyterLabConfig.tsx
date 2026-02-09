@@ -10,16 +10,29 @@ import {
   useUpdateConfig,
   useConfigByIndex,
 } from "../stores";
+import {
+  getServiceConfig,
+  getSystemConfig,
+} from "@/utils/frontendCollectionHelper";
 
 // TODO : Use dependencies instead of test options
 // TODO : Refactor inline styles to CSS or styled-components
 const JupyterLabConfig = () => {
   const configIndex = useContext(JupyterlabIDContext);
   const config = useConfigByIndex(configIndex);
+  const serviceConfig = getServiceConfig();
+  const systemConfig = getSystemConfig();
   const updateConfig = useUpdateConfig();
-
   const handleUpdateConfigName = (newName: string) => {
     updateConfig(config.id, { name: newName });
+  };
+
+  const handleUpdateConfigProfile = (newProfile: string) => {
+    updateConfig(config.id, { profile: newProfile, option: newProfile });
+  };
+
+  const handleUpdateConfigSystem = (newSystem: string) => {
+    updateConfig(config.id, { system: newSystem });
   };
 
   return (
@@ -38,35 +51,32 @@ const JupyterLabConfig = () => {
           className="Input"
           type="text"
           id="name"
-          defaultValue={config?.name}
-          value={config?.name}
+          defaultValue={config.name}
+          value={config.name}
           onChange={(e) => handleUpdateConfigName(e.target.value)}
         />
       </div>
       <SelectRow
         id="version"
         label="Version"
-        options={[
-          { value: "jupyterlab-4-3", label: "JupyterLab - 4.3" },
-          { value: "jupyterlab-4-2", label: "JupyterLab - 4.2" },
-          { value: "jupyterlab-3-6", label: "JupyterLab - 3.6" },
-          { value: "repo2docker-binder", label: "Repo2Docker (binder)" },
-          { value: "xpra-remote-desktop", label: "Xpra (Remote Desktop)" },
-          { value: "custom-docker-image", label: "Custom Docker Image" },
-        ]}
-        defaultValue={config?.profile}
+        options={Object.entries(serviceConfig.JupyterLab.options).map(
+          ([key, value]) => ({
+            value: key,
+            label: value.name,
+          }),
+        )}
+        defaultValue={config.profile}
+        onChange={(e) => handleUpdateConfigProfile(e)}
       />
       <SelectRow
         id="system"
         label="System"
-        options={[
-          { value: "juwels", label: "Juwels" },
-          { value: "jureca", label: "Jureca" },
-          { value: "jupyter", label: "Jupyter" },
-          { value: "jusuf", label: "Jusuf" },
-          { value: "JSC-Cloud", label: "JSC-Cloud" },
-        ]}
-        defaultValue={config?.system}
+        options={Object.entries(systemConfig).map(([key, _value]) => ({
+          value: key,
+          label: key,
+        }))}
+        defaultValue={config.system}
+        onChange={(e) => handleUpdateConfigSystem(e)}
       />
       <Separator.Root
         style={{

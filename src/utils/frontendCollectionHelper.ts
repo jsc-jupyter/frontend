@@ -33,10 +33,16 @@ const getUserModules = (configID: string) => {
   return userModules;
 };
 
+const getSystemConfig = () => {
+  const systemConfig = getFrontendCollection().systemConfig;
+  return systemConfig;
+};
+
 export {
   getFrontendCollection,
   getServiceConfig,
   getConfigModules,
   getUserEnvironments,
   getUserModules,
+  getSystemConfig,
 };
