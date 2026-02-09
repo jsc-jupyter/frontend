@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import JupyterlabCollapsibleRow from "./JupyterLabCollabsibleRow";
 import { useConfigStore, Environment } from "@/stores";
+import { getFrontendCollection } from "@/utils/frontendCollectionHelper";
 
 // TODO : Refactor inline styles to CSS or styled-components
 // TODO : Better handling
@@ -10,7 +11,7 @@ const Table = () => {
   const addConfig = useConfigStore((state) => state.addConfig);
 
   useEffect(() => {
-    const frontendCollection = window.getFrontendCollection();
+    const frontendCollection = getFrontendCollection();
     const userServers = Object.entries(
       frontendCollection.decrypted_user_options,
     );
@@ -70,12 +71,8 @@ const Table = () => {
           <th>Action</th>
         </tr>
       </thead>
-      {configs.map((config, index) => (
-        <JupyterlabCollapsibleRow
-          key={index}
-          server={config}
-          configIndex={index}
-        />
+      {configs.map((_config, index) => (
+        <JupyterlabCollapsibleRow key={index} configIndex={index} />
       ))}
     </table>
   );

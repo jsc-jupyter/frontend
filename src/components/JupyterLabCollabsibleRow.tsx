@@ -1,31 +1,28 @@
 import React from "react";
 import { Collapsible } from "radix-ui";
 import JupyterLabTab from "./JupyterLabTab";
+import { useConfigByIndex } from "@/stores";
 
 // TODO : Add animations to the collapsible row
 // TODO : Refactor inline styles to CSS or styled-components
 
 interface JupyterlabCollapsibleRowProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  server: any;
   configIndex: number;
 }
 
 const JupyterlabCollapsibleRow = ({
-  server,
   configIndex,
 }: JupyterlabCollapsibleRowProps) => {
-  console.log(server);
-  console.log(configIndex);
+  const config = useConfigByIndex(configIndex);
   return (
     <Collapsible.Root asChild>
       <tbody style={{ backgroundColor: "darkgray" }}>
         <Collapsible.Trigger asChild>
           <tr style={{ WebkitAppearance: "unset" }}>
             <td />
-            <td> {server.name} </td>
-            <td> {server.system} </td>
-            <td> {server.service} </td>
+            <td> {config.name} </td>
+            <td> {config.system} </td>
+            <td> {config.service} </td>
             <td>
               <button
                 onClick={(e) => {

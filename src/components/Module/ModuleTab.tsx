@@ -29,8 +29,9 @@ function createCheckboxes(
 ): JSX.Element[] {
   return Object.entries(items).map(([name, item]) => {
     const sectionKey = section.toLowerCase();
-    const isChecked = config?.[sectionKey]?.some((m: any) => m.name === name) || false;
-    
+    const isChecked =
+      config?.[sectionKey]?.some((m: any) => m.name === name) || false;
+
     return (
       <div
         key={item.name}
@@ -88,7 +89,11 @@ const ModuleTab = () => {
 
   const handleAddModule = (module: string, moduleType: string) => {
     if (!config) return;
-    addModule(config.id, { name: module }, moduleType.toLocaleLowerCase());
+    addModule(
+      config.id,
+      { name: module, version: "" },
+      moduleType.toLocaleLowerCase(),
+    );
   };
 
   const handleDeleteModule = (module: string, moduleType: string) => {
