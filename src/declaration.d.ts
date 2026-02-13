@@ -17,6 +17,7 @@ declare global {
       xsrf_token: string;
     };
     getFrontendCollection();
+    getFrontendConfig();
   }
 }
 
