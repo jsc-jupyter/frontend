@@ -1,0 +1,35 @@
+.log-container {
+  width: 100%;
+}
+
+.log-container__terminal-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.log-container__terminal {
+  width: 60%;
+  max-height: 50%;
+  background-color: #000;
+  overflow: auto;
+  border-radius: 0.375rem;
+  min-height: 40px;
+}
+
+.log-container__card {
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 1rem;
+  background-color: #fff;
+  color: #000;
+}
+
+.log-container__text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-family: monospace;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}

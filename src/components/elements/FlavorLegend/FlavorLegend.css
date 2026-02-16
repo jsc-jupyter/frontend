@@ -1,0 +1,45 @@
+.flavor-legend {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 1rem;
+}
+
+.flavor-legend__title {
+  flex: 0 0 33.33%;
+  font-weight: 700;
+}
+
+.flavor-legend__items {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+.flavor-legend__box {
+  height: 15px;
+  width: 15px;
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+.flavor-legend__box--free {
+  background-color: #198754;
+}
+
+.flavor-legend__box--used {
+  background-color: #023d6b;
+}
+
+.flavor-legend__box--exceeded {
+  background-color: #dc3545;
+}
+
+.flavor-legend__label {
+  margin-left: 0.25rem;
+}
+
+.flavor-legend__spacer {
+  width: 1rem;
+}

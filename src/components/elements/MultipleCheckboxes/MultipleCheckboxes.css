@@ -1,0 +1,41 @@
+.multiple-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.multiple-checkboxes__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.multiple-checkboxes__item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.multiple-checkboxes__checkbox {
+  width: 16px;
+  height: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #888;
+  border-radius: 3px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.multiple-checkboxes__checkbox[data-state="checked"] {
+  background-color: var(--accent, #0d6efd);
+  border-color: var(--accent, #0d6efd);
+  color: #fff;
+}
+
+.multiple-checkboxes__checkbox[data-disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
