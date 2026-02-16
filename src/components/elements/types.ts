@@ -1,5 +1,7 @@
 /** Shared types for element components extracted from legacy tcCreateElement. */
 
+// TODO: Change to Zustand where possible 
+
 export interface LabelOptions {
   type?: string;
   value?: string;
