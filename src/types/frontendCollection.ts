@@ -76,8 +76,17 @@ type Webdav = StorageBase & {
 
 export type Storage = B2Drop | AWS | S3CompatibleProvider | Webdav;
 
+type Module = {
+  [type in moduleType]: string[];
+};
+
 type decrypted_user_options = {
   [id: string]: {
+    hpc?: {
+      account: string;
+      partition: string;
+      project: string;
+    };
     name: string;
     service: string;
     system: string;
@@ -85,9 +94,7 @@ type decrypted_user_options = {
     profile: string;
     flavor: string;
     workshop_id: boolean;
-    modules: {
-      [type in moduleType]: string[];
-    };
+    modules: Module;
     module_versions: {
       [name: string]: string[];
     };
@@ -97,7 +104,10 @@ type decrypted_user_options = {
     envvariables: {
       [name: string]: string;
     };
-    //datamount-x which is storage but wait till change in structure 
+    resources: {
+      [key: string]: number;
+    };
+    //datamount-x which is storage but wait till change in structure
   };
 };
 

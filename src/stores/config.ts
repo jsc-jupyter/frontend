@@ -5,6 +5,11 @@ import { Module } from "./module";
 export interface Config {
   id: string;
   name: string;
+  hpc?: {
+    account: string;
+    partition: string;
+    project: string;
+  };
   service: string;
   system: string;
   option: string;
@@ -44,7 +49,7 @@ export interface ConfigActions {
   addStorage: (configId: string, storage: Storage) => void;
   updateStorage: (
     configId: string,
-    storageIdentifier: number,
+    storageIdentifier: string,
     updates: Partial<Storage>,
   ) => void;
   deleteStorage: (configId: string, storageIdentifier: number) => void;
