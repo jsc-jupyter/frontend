@@ -21,9 +21,7 @@ const DateInput: React.FC<DateInputProps> = ({
 
   const { defaultValue, minDate, maxDate } = useMemo(() => {
     const today = new Date();
-    const plusHalfYear = new Date(
-      new Date().setMonth(today.getMonth() + 6),
-    );
+    const plusHalfYear = new Date(new Date().setMonth(today.getMonth() + 6));
     const plusOneYear = new Date(
       new Date().setFullYear(today.getFullYear() + 1),
     );

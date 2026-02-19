@@ -40,10 +40,7 @@ const ReservationInfo: React.FC<ReservationInfoProps> = ({
           className="reservation-info__details"
         >
           <Collapsible.Trigger asChild>
-            <button
-              type="button"
-              className="reservation-info__summary"
-            >
+            <button type="button" className="reservation-info__summary">
               {open ? "▾" : "▸"} Detailed reservation information:
             </button>
           </Collapsible.Trigger>

@@ -4,7 +4,7 @@ import { Label } from "radix-ui";
 type SelectRowProps = {
   label: string;
   id: string;
-  options: { value: string; label: string }[];
+  options: { value: string; label: string; disabled?: boolean }[];
   defaultValue?: string;
   onChange?: (value: string) => void;
 };
@@ -34,7 +34,11 @@ const SelectRow = ({
         onChange={(e) => onChange && onChange(e.target.value)}
       >
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option
+            key={option.value}
+            value={option.value}
+            disabled={option.disabled || false}
+          >
             {option.label}
           </option>
         ))}

@@ -39,10 +39,7 @@ const TextInput: React.FC<TextInputProps> = ({
   );
 
   const handleCopy = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(value);
-    } catch {
-    }
+    await navigator.clipboard.writeText(value);
   }, [value]);
 
   const inputType = isSecret && !showPassword ? "password" : "text";

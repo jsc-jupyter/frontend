@@ -92,7 +92,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
   );
 
   const visibleButtons = buttons.filter((btn) => {
-    const btnOpts = (elementOptions.input?.options?.[btn] ?? {}) as ButtonConfig;
+    const btnOpts = (elementOptions.input?.options?.[btn] ??
+      {}) as ButtonConfig;
     if (isFirstRow && btnOpts.firstRow === false) return false;
     if (!isFirstRow && btnOpts.defaultRow === false) return false;
     return true;
@@ -120,10 +121,7 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
           </Dialog.Description>
           <div className="action-buttons__dialog-footer">
             <Dialog.Close asChild>
-              <button
-                type="button"
-                className="action-buttons__dialog-close"
-              >
+              <button type="button" className="action-buttons__dialog-close">
                 Close
               </button>
             </Dialog.Close>
@@ -153,7 +151,8 @@ const ActionButtons: React.FC<ActionButtonsProps> = ({
             return <React.Fragment key={btn}>{shareDialog}</React.Fragment>;
           }
 
-          const btnOpts = (elementOptions.input?.options?.[btn] ?? {}) as ButtonConfig;
+          const btnOpts = (elementOptions.input?.options?.[btn] ??
+            {}) as ButtonConfig;
           const variant = BUTTON_VARIANT[btn] ?? "primary";
           const text = btnOpts.text || BUTTON_TEXT[btn] || btn;
           const icon = BUTTON_ICON[btn];

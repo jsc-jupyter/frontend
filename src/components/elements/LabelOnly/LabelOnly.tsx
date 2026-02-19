@@ -5,10 +5,7 @@ import "./LabelOnly.css";
 
 type LabelOnlyProps = BaseElementProps;
 
-const LabelOnly: React.FC<LabelOnlyProps> = ({
-  elementId,
-  elementOptions,
-}) => {
+const LabelOnly: React.FC<LabelOnlyProps> = ({ elementId, elementOptions }) => {
   const opts = elementOptions.input?.options ?? {};
 
   return (

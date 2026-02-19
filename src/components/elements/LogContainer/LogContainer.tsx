@@ -15,10 +15,7 @@ const LogContainer: React.FC<LogContainerProps> = ({
   return (
     <div className="log-container">
       <div className="log-container__terminal-wrapper">
-        <div
-          id={`${elementId}-terminal`}
-          className="log-container__terminal"
-        >
+        <div id={`${elementId}-terminal`} className="log-container__terminal">
           {terminalContent}
         </div>
       </div>

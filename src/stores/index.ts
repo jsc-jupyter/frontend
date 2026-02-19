@@ -1,8 +1,14 @@
 import { createContext } from "react";
 export { useConfigStore } from "./jupyterStore";
+export { useFieldStore } from "./fieldStore";
 
 // Types
 export type { Config, ConfigState, ConfigActions, ConfigStore } from "./config";
+export type {
+  FieldStore,
+  FieldStoreState,
+  FieldStoreActions,
+} from "./fieldStore";
 export type { Module } from "./module";
 export type { Environment } from "./environment";
 export type { Storage } from "./storage";

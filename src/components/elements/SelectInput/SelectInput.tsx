@@ -1,6 +1,10 @@
 import React, { useId } from "react";
 import { Select } from "radix-ui";
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "@radix-ui/react-icons";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  ChevronUpIcon,
+} from "@radix-ui/react-icons";
 import ElementLabel from "../ElementLabel/ElementLabel";
 import type { BaseElementProps } from "../types";
 import "./SelectInput.css";
@@ -54,7 +58,11 @@ const SelectInput: React.FC<SelectInputProps> = ({
           </Select.Trigger>
 
           <Select.Portal>
-            <Select.Content className="select-input__content" position="popper" sideOffset={4}>
+            <Select.Content
+              className="select-input__content"
+              position="popper"
+              sideOffset={4}
+            >
               <Select.ScrollUpButton>
                 <ChevronUpIcon />
               </Select.ScrollUpButton>

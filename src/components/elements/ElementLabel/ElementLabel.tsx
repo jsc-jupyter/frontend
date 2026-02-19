@@ -30,7 +30,8 @@ const ElementLabel: React.FC<ElementLabelProps> = ({
   } = labelOptions;
 
   const isDisabled = disabled || labelOpts.enabled === false;
-  const alignRight = (labelOpts as Record<string, unknown>)["align-right"] !== false;
+  const alignRight =
+    (labelOpts as Record<string, unknown>)["align-right"] !== false;
 
   const hasText = [
     "text",
@@ -96,7 +97,9 @@ const ElementLabel: React.FC<ElementLabelProps> = ({
         className="element-label__inner"
         htmlFor={htmlFor ?? `${elementId}-input`}
       >
-        {hasText && <span>{typeof labelValue === "string" ? labelValue : ""}</span>}
+        {hasText && (
+          <span>{typeof labelValue === "string" ? labelValue : ""}</span>
+        )}
 
         {(hasTooltipIcon || hasClickIcon) && tooltipContent}
 
@@ -104,12 +107,11 @@ const ElementLabel: React.FC<ElementLabelProps> = ({
           <Checkbox.Root
             className={`element-label__checkbox ${alignRight ? "" : "element-label__checkbox-left"}`}
             defaultChecked={
-              defaultChecked || (labelOpts as Record<string, unknown>).default === true
+              defaultChecked ||
+              (labelOpts as Record<string, unknown>).default === true
             }
             disabled={isDisabled}
-            onCheckedChange={(checked) =>
-              onCheckboxChange?.(checked === true)
-            }
+            onCheckedChange={(checked) => onCheckboxChange?.(checked === true)}
             id={`${elementId}-input-cb`}
           >
             <Checkbox.Indicator>
