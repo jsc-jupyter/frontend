@@ -5,7 +5,7 @@ import "./TextLink.css";
 
 type TextLinkProps = BaseElementProps;
 
-const TextLink: React.FC<TextLinkProps> = ({ elementId, elementOptions }) => {
+const TextLink = ({ elementId, elementOptions }: TextLinkProps) => {
   const opts = elementOptions.input?.options ?? {};
   const href = typeof opts.href === "string" ? opts.href : "#";
   const text = typeof opts.text === "string" ? opts.text : elementId;

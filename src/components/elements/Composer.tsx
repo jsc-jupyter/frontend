@@ -9,12 +9,12 @@ interface ComposerProps {
   rowId?: string;
 }
 
-const Composer: React.FC<ComposerProps> = ({
+const Composer = ({
   tabConfig,
   serviceId,
   tabId,
   rowId = "",
-}) => {
+}: ComposerProps) => {
   return (
     <TabRenderer
       tabConfig={tabConfig}

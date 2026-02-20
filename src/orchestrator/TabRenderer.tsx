@@ -9,12 +9,12 @@ export interface TabRendererProps {
   rowId?: string;
 }
 
-export const TabRenderer: React.FC<TabRendererProps> = ({
+export const TabRenderer = ({
   tabConfig,
   serviceId,
   tabId,
   rowId = "",
-}) => {
+}: TabRendererProps) => {
   return (
     <>
       {Object.entries(tabConfig).map(([section, fields]) => (

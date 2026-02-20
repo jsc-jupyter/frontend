@@ -13,7 +13,7 @@ type PropType = {
   options?: EmblaOptionsType;
 };
 
-const Carousel: React.FC<PropType> = (props) => {
+const Carousel = (props: PropType) => {
   const { options } = props;
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
   const carousels = useCarouselStore((state) => state.carousels);

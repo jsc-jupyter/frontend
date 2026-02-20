@@ -23,14 +23,14 @@ export interface FieldOrchestratorProps {
   isFirstRow?: boolean;
 }
 
-export const FieldOrchestrator: React.FC<FieldOrchestratorProps> = ({
+export const FieldOrchestrator = ({
   fieldName,
   config,
   serviceId,
   tabId,
   rowId = "",
   isFirstRow = false,
-}) => {
+}: FieldOrchestratorProps) => {
   const setValue = useFieldStore((s) => s.setValue);
   const registerCollected = useFieldStore((s) => s.registerCollected);
   const unregisterCollected = useFieldStore((s) => s.unregisterCollected);

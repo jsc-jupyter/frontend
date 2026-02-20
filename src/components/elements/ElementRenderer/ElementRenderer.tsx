@@ -31,7 +31,7 @@ interface ElementRendererProps extends BaseElementProps {
  * Factory component that renders the correct element based on `elementOptions.input.type`.
  * Replaces the legacy `tcCreateElement` switch statement.
  */
-const ElementRenderer: React.FC<ElementRendererProps> = (props) => {
+const ElementRenderer = (props: ElementRendererProps) => {
   const type = (props.elementOptions.input?.type ?? "") as ElementType;
 
   switch (type) {

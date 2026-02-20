@@ -10,12 +10,12 @@ interface ReservationInfoProps extends BaseElementProps {
   details?: string;
 }
 
-const ReservationInfo: React.FC<ReservationInfoProps> = ({
+const ReservationInfo = ({
   startTime = "",
   endTime = "",
   state = "",
   details = "",
-}) => {
+}: ReservationInfoProps) => {
   const [open, setOpen] = useState(false);
 
   return (

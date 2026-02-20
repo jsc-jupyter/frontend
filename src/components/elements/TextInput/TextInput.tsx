@@ -8,11 +8,7 @@ interface TextInputProps extends BaseElementProps {
   onChange?: (value: string) => void;
 }
 
-const TextInput: React.FC<TextInputProps> = ({
-  elementId,
-  elementOptions,
-  onChange,
-}) => {
+const TextInput = ({ elementId, elementOptions, onChange }: TextInputProps) => {
   const inputId = useId();
   const opts = elementOptions.input?.options ?? {};
   const isSecret = !!opts.secret;

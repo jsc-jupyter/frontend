@@ -11,10 +11,7 @@ interface StorageEntryProps extends BaseElementProps {
   onChange?: (entries: StorageEntryData[]) => void;
 }
 
-const StorageEntry: React.FC<StorageEntryProps> = ({
-  elementOptions,
-  onChange,
-}) => {
+const StorageEntry = ({ elementOptions, onChange }: StorageEntryProps) => {
   const [rows, setRows] = useState<StorageEntryData[]>([]);
   const isDisabled = elementOptions.input?.options?.enabled === false;
 

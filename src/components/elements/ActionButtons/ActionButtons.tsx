@@ -74,13 +74,13 @@ const BUTTON_ICON: Record<string, React.ReactNode> = {
   getlink: <LinkBreak2Icon />,
 };
 
-const ActionButtons: React.FC<ActionButtonsProps> = ({
+const ActionButtons = ({
   serviceId,
   rowId,
   elementOptions,
   isFirstRow = false,
   onAction,
-}) => {
+}: ActionButtonsProps) => {
   const buttons: string[] =
     (elementOptions.input?.options?.buttons as string[]) ?? [];
 

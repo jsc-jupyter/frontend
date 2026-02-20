@@ -7,11 +7,11 @@ interface NumberInputProps extends BaseElementProps {
   onChange?: (value: number) => void;
 }
 
-const NumberInput: React.FC<NumberInputProps> = ({
+const NumberInput = ({
   elementId,
   elementOptions,
   onChange,
-}) => {
+}: NumberInputProps) => {
   const inputId = useId();
   const opts = elementOptions.input?.options ?? {};
 

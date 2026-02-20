@@ -13,12 +13,7 @@ const App = () => {
         <FilterBlock />
         <Table />
         <div style={{ margin: 5 }}></div>
-        <TableBuilder />
         <SSEHandler />
-        <ServiceTables
-          frontendConfig={window.getFrontendConfig()}
-          pageType="home"
-        />
       </div>
     </StrictMode>
   );

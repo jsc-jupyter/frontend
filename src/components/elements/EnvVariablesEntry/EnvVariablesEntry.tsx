@@ -12,10 +12,10 @@ interface EnvVariablesEntryProps extends BaseElementProps {
   onChange?: (vars: Record<string, string>) => void;
 }
 
-const EnvVariablesEntry: React.FC<EnvVariablesEntryProps> = ({
+const EnvVariablesEntry = ({
   elementOptions,
   onChange,
-}) => {
+}: EnvVariablesEntryProps) => {
   const [rows, setRows] = useState<EnvVar[]>([]);
 
   const toRecord = (items: EnvVar[]): Record<string, string> =>

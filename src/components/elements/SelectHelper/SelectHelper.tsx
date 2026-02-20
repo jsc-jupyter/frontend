@@ -9,11 +9,11 @@ interface SelectHelperProps extends BaseElementProps {
   onDeselectAll?: () => void;
 }
 
-const SelectHelper: React.FC<SelectHelperProps> = ({
+const SelectHelper = ({
   elementId,
   onSelectAll,
   onDeselectAll,
-}) => {
+}: SelectHelperProps) => {
   return (
     <div className="select-helper">
       <Separator.Root

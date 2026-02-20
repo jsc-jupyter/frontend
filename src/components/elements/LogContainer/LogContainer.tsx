@@ -7,11 +7,11 @@ interface LogContainerProps extends BaseElementProps {
   terminalContent?: React.ReactNode;
 }
 
-const LogContainer: React.FC<LogContainerProps> = ({
+const LogContainer = ({
   elementId,
   logs = "Logs collected during the Start process will be shown here.",
   terminalContent,
-}) => {
+}: LogContainerProps) => {
   return (
     <div className="log-container">
       <div className="log-container__terminal-wrapper">

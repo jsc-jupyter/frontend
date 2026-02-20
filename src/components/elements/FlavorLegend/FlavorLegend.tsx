@@ -7,7 +7,7 @@ const LEGEND_ITEMS = [
   { className: "flavor-legend__box--exceeded", label: "Limit exceeded" },
 ] as const;
 
-const FlavorLegend: React.FC = () => {
+const FlavorLegend = () => {
   return (
     <div className="flavor-legend">
       <span className="flavor-legend__title">Available Flavors</span>

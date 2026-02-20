@@ -5,7 +5,7 @@ interface HorizontalRuleProps {
   className?: string;
 }
 
-const HorizontalRule: React.FC<HorizontalRuleProps> = ({ className }) => {
+const HorizontalRule = ({ className }: HorizontalRuleProps) => {
   return (
     <Separator.Root
       decorative

@@ -9,11 +9,11 @@ interface CheckboxInputProps extends BaseElementProps {
   onChange?: (checked: boolean) => void;
 }
 
-const CheckboxInput: React.FC<CheckboxInputProps> = ({
+const CheckboxInput = ({
   elementId,
   elementOptions,
   onChange,
-}) => {
+}: CheckboxInputProps) => {
   const inputId = useId();
   const opts = elementOptions.input?.options ?? {};
 

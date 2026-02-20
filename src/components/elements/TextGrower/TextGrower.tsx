@@ -8,11 +8,11 @@ interface TextGrowerProps extends BaseElementProps {
   onChange?: (values: string[]) => void;
 }
 
-const TextGrower: React.FC<TextGrowerProps> = ({
+const TextGrower = ({
   elementId,
   elementOptions,
   onChange,
-}) => {
+}: TextGrowerProps) => {
   const opts = elementOptions.input?.options ?? {};
   const isSecret = !!opts.secret;
   const isDisabled = opts.enabled === false;

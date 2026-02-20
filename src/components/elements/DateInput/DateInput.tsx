@@ -11,11 +11,7 @@ function formatDate(date: Date): string {
   return date.toISOString().split("T")[0];
 }
 
-const DateInput: React.FC<DateInputProps> = ({
-  elementId,
-  elementOptions,
-  onChange,
-}) => {
+const DateInput = ({ elementId, elementOptions, onChange }: DateInputProps) => {
   const inputId = useId();
   const opts = elementOptions.input?.options ?? {};
 

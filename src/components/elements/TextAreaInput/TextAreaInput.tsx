@@ -7,11 +7,11 @@ interface TextAreaInputProps extends BaseElementProps {
   onChange?: (value: string) => void;
 }
 
-const TextAreaInput: React.FC<TextAreaInputProps> = ({
+const TextAreaInput = ({
   elementId,
   elementOptions,
   onChange,
-}) => {
+}: TextAreaInputProps) => {
   const inputId = useId();
   const opts = elementOptions.input?.options ?? {};
   const rows = typeof opts.rows === "number" ? opts.rows : 4;

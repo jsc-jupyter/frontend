@@ -13,11 +13,11 @@ interface SelectInputProps extends BaseElementProps {
   onChange?: (value: string) => void;
 }
 
-const SelectInput: React.FC<SelectInputProps> = ({
+const SelectInput = ({
   elementId,
   elementOptions,
   onChange,
-}) => {
+}: SelectInputProps) => {
   const labelId = useId();
   const opts = elementOptions.input?.options ?? {};
   const values = elementOptions.input?.values ?? {};

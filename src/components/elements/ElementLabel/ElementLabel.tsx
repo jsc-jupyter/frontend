@@ -13,14 +13,14 @@ interface ElementLabelProps {
   onCheckboxChange?: (checked: boolean) => void;
 }
 
-const ElementLabel: React.FC<ElementLabelProps> = ({
+const ElementLabel = ({
   elementId,
   labelOptions = {},
   htmlFor,
   disabled = false,
   defaultChecked = false,
   onCheckboxChange,
-}) => {
+}: ElementLabelProps) => {
   const {
     type: labelType = "",
     value: labelValue = "",

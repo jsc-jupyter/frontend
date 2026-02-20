@@ -17,12 +17,12 @@ interface MultipleCheckboxesProps extends BaseElementProps {
   onCheckboxChange?: (id: string, checked: boolean) => void;
 }
 
-const MultipleCheckboxes: React.FC<MultipleCheckboxesProps> = ({
+const MultipleCheckboxes = ({
   elementId,
   elementOptions,
   items = [],
   onCheckboxChange,
-}) => {
+}: MultipleCheckboxesProps) => {
   const opts = elementOptions.input?.options ?? {};
 
   return (
