@@ -1,13 +1,15 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { componentRegistry } from "@/registry/componentRegistry";
 import {
   triggerRegistry,
   type TriggerContext,
 } from "@/registry/triggerRegistry";
-import { useFieldStore } from "@/stores/fieldStore";
+import { useConfigStore } from "@/stores/jupyterStore";
 import { evaluateDependency } from "@/utils/dependencyHelper";
 import type { FieldConfig } from "@/types/frontendConfig";
 import type { ElementOptions } from "@/components/elements/types";
+import { useGetFieldValue } from "@/stores/hooks";
+import { JupyterlabIDContext } from "@/stores";
 
 export interface FieldOrchestratorProps {
   // Unique field name as it appears in the tab config (e.g. "system"). */
@@ -31,57 +33,74 @@ export const FieldOrchestrator = ({
   rowId = "",
   isFirstRow = false,
 }: FieldOrchestratorProps) => {
-  const setValue = useFieldStore((s) => s.setValue);
-  const registerCollected = useFieldStore((s) => s.registerCollected);
-  const unregisterCollected = useFieldStore((s) => s.unregisterCollected);
-  const setFieldLoading = useFieldStore((s) => s.setFieldLoading);
+  const configIndex = useContext(JupyterlabIDContext);
+  const value = useGetFieldValue(configIndex, fieldName);
+  const setFieldValue = useConfigStore((s) => s.setFieldValue);
+  const setFieldLoading = useConfigStore((s) => s.setFieldLoading);
+  const allValues =
+    useConfigStore(
+      (s) =>
+        s.frontendCollection.decrypted_user_options[configIndex] as
+          | Record<string, unknown>
+          | undefined,
+    ) ?? {};
+  const options: Record<string, string> = {};
 
-  const value = useFieldStore((s) => s.values[fieldName]);
-  const allValues = useFieldStore((s) => s.values);
+  if (fieldName === "system") {
+    options["JSC-Cloud"] = "JSC-Cloud";
+    options["JUWELS"] = "JUWELS";
+    options["JUSUF"] = "JUSUF";
+    options["JURECA"] = "JURECA";
+    options["Jupiter"] = "Jupiter";
+  } else if (fieldName === "option") {
+    options["4.3"] = "4.3";
+    options["4.2"] = "4.2";
+    options["3.6"] = "3.6";
+    options["repo2docker"] = "repo2docker";
+    options["xpra"] = "xpra";
+    options["custom"] = "custom";
+  }
 
-  const isCollected = !!config.input?.options?.collect;
-
-  useEffect(() => {
-    if (isCollected) {
-      registerCollected(fieldName);
-    }
-    return () => {
-      if (isCollected) unregisterCollected(fieldName);
-    };
-  }, [fieldName, isCollected, registerCollected, unregisterCollected]);
-
+  // Seed default value from config if FrontendCollection has no value yet
   useEffect(() => {
     if (value === undefined && config.input?.options?.value != null) {
-      setValue(fieldName, config.input.options.value);
+      setFieldValue(configIndex, fieldName, config.input.options.value);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldName]);
 
+  console.log(config);
   const depResult = useMemo(
     () => evaluateDependency(config.dependency, allValues),
     [config.dependency, allValues],
   );
 
   const buildTriggerContext = useCallback((): TriggerContext => {
-    const store = useFieldStore.getState();
+    const store = useConfigStore.getState();
     return {
       fieldName,
+      configId: configIndex,
       serviceId,
-      getFieldValue: (name: string) => store.values[name],
-      setFieldValue: (name: string, val: unknown) => store.setValue(name, val),
-      getAllValues: () => ({ ...store.values }),
+      getFieldValue: (name: string) => store.getFieldValue(configIndex, name),
+      setFieldValue: (name: string, val: unknown) =>
+        store.setFieldValue(configIndex, name, val),
+      getAllValues: () => store.getAllFieldValues(configIndex),
     };
-  }, [fieldName, serviceId]);
+  }, [fieldName, serviceId, configIndex]);
 
   const handleChange = useCallback(
     async (newValue: unknown) => {
-      setValue(fieldName, newValue);
+      setFieldValue(configIndex, fieldName, newValue);
 
       const context = buildTriggerContext();
-
+      console.log(context);
       if (config.triggerOnChange) {
         setFieldLoading(fieldName, true);
         try {
+          console.log(
+            `Executing trigger "${config.triggerOnChange}" for field "${fieldName}" with value:`,
+            newValue,
+          );
           await triggerRegistry.execute(
             config.triggerOnChange,
             newValue,
@@ -98,9 +117,10 @@ export const FieldOrchestrator = ({
     },
     [
       fieldName,
+      configIndex,
       config.triggerOnChange,
       config.onInputChange,
-      setValue,
+      setFieldValue,
       buildTriggerContext,
       setFieldLoading,
     ],
@@ -141,12 +161,12 @@ export const FieldOrchestrator = ({
             ? (config.input.options?.show ?? true)
             : false,
         },
-        values: config.input.values,
+        values: options,
       },
       dependency: config.dependency as Record<string, string[]> | undefined,
       trigger: config.trigger,
     }),
-    [config, value, depResult],
+    [config, value, depResult, options],
   );
 
   if (!depResult.visible) {

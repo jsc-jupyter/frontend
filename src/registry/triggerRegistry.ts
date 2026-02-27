@@ -1,5 +1,6 @@
 export interface TriggerContext {
   fieldName: string;
+  configId: string;
   serviceId: string;
   getFieldValue: (name: string) => unknown;
   setFieldValue: (name: string, value: unknown) => void;

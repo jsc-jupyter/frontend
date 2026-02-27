@@ -308,7 +308,6 @@ type FrontendCollection = {
   serviceConfig: serviceConfig;
   systemConfig: SystemConfig;
   userModules: UserModules;
-  test: string;
   userAge: string;
 };
 

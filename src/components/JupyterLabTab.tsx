@@ -1,52 +1,41 @@
 import React from "react";
 import { Tabs } from "radix-ui";
-import JupyterLabConfig from "./JupyterLabConfig";
-import StorageTab from "./Storage/storageTab";
-import EnvironmentTab from "./Environment/EnvironmentTab";
-import ResourcesTab from "./Resources/ResourcesTab";
-import Moduletab from "./Module/ModuleTab";
-import LogTab from "./Logs/LogTab";
 import { JupyterlabIDContext } from "../stores";
+import { getFrontendConfig } from "@/utils/frontendConfigHelper";
+import { TabRenderer } from "@/orchestrator";
 
 // TODO : Refactor inline styles to CSS or styled-components
 // TODO : Add proper content to each tab 4/6
 
 interface JupyterLabTabProps {
-  configIndex: number;
+  configId: string;
 }
 
-const JupyterLabTab = ({ configIndex }: JupyterLabTabProps) => {
+const JupyterLabTab = ({ configId }: JupyterLabTabProps) => {
+  const frontendConfig = getFrontendConfig();
+  const tabs =
+    frontendConfig.services.options[frontendConfig.services.default].tabs;
   return (
     <Tabs.Root defaultValue="lab" style={{ display: "flex" }}>
       <Tabs.List
         style={{ display: "flex", flexDirection: "column", width: "384px" }}
       >
-        <Tabs.Trigger value="lab">Lab Config</Tabs.Trigger>
-        <Tabs.Trigger value="storage">Storage</Tabs.Trigger>
-        <Tabs.Trigger value="environment">Environment Variables</Tabs.Trigger>
-        <Tabs.Trigger value="modules">Kernels and Extensions</Tabs.Trigger>
-        <Tabs.Trigger value="resources">Ressources</Tabs.Trigger>
-        <Tabs.Trigger value="logs">Logs</Tabs.Trigger>
+        {Object.entries(tabs).map(([tabKey, _tabConfig]) => (
+          <Tabs.Trigger key={tabKey} value={tabKey}>
+            {tabKey}
+          </Tabs.Trigger>
+        ))}
       </Tabs.List>
-      <JupyterlabIDContext value={configIndex}>
-        <Tabs.Content value="lab" style={{ width: "100%" }}>
-          <JupyterLabConfig />
-        </Tabs.Content>
-        <Tabs.Content value="storage" style={{ width: "100%" }}>
-          <StorageTab />
-        </Tabs.Content>
-        <Tabs.Content value="environment" style={{ width: "100%" }}>
-          <EnvironmentTab />
-        </Tabs.Content>
-        <Tabs.Content value="resources" style={{ width: "100%" }}>
-          <ResourcesTab />
-        </Tabs.Content>
-        <Tabs.Content value="modules" style={{ width: "100%" }}>
-          <Moduletab />
-        </Tabs.Content>
-        <Tabs.Content value="logs" style={{ width: "100%" }}>
-          <LogTab />
-        </Tabs.Content>
+      <JupyterlabIDContext value={configId}>
+        {Object.entries(tabs).map(([tabKey, tabConfig]) => (
+          <Tabs.Content key={tabKey} value={tabKey} style={{ width: "100%" }}>
+            <TabRenderer
+              tabConfig={tabConfig}
+              serviceId={frontendConfig.services.default}
+              tabId={tabKey}
+            />
+          </Tabs.Content>
+        ))}
       </JupyterlabIDContext>
     </Tabs.Root>
   );

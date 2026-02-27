@@ -1,66 +1,43 @@
-import { Storage } from "./storage";
-import { Environment } from "./environment";
-import { Module } from "./module";
-
-export interface Config {
-  id: string;
-  name: string;
-  hpc?: {
-    account: string;
-    partition: string;
-    project: string;
-  };
-  service: string;
-  system: string;
-  option: string;
-  profile: string;
-  environments: Environment[];
-  storages: Storage[];
-  communities: Module[];
-  extensions: Module[];
-  kernels: Module[];
-  proxies: Module[];
-}
+import { FrontendCollection } from "@/types/frontendCollection";
 
 // Store state type
 export interface ConfigState {
-  configs: Config[];
+  frontendCollection: FrontendCollection;
+
+  /** Fields marked for collection (sent with form submission). */
+  collectedFields: Record<string, boolean>;
+
+  /** Dependency resolution flags — true when the named dependency is met. */
+  resolvedDependencies: Record<string, boolean>;
+
+  /** Per-field loading state (e.g. while an async trigger runs). */
+  loadingFields: Record<string, boolean>;
 }
 
 // Store actions type
 export interface ConfigActions {
-  // Config operations
-  addConfig: (config: Config) => void;
-  updateConfig: (id: string, updates: Partial<Omit<Config, "id">>) => void;
-  deleteConfig: (id: string) => void;
-  getConfigById: (id: string) => Config | undefined;
-  getConfigByIndex: (index: number) => Config | undefined;
+  getFieldValue: (configId: string, fieldName: string) => unknown;
+  setFieldValue: (configId: string, fieldName: string, value: unknown) => void;
+  getAllFieldValues: (configId: string) => Record<string, unknown>;
 
-  // Environment operations
-  addEnvironment: (configId: string, environment: Environment) => void;
-  updateEnvironment: (
-    configId: string,
-    envName: string,
-    updates: Partial<Environment>,
-  ) => void;
-  deleteEnvironment: (configId: string, envName: string) => void;
+  // --- Collected fields ---
+  registerCollected: (fieldName: string) => void;
+  unregisterCollected: (fieldName: string) => void;
+  getCollectedValues: (configId: string) => Record<string, unknown>;
 
-  // Storage operations
-  addStorage: (configId: string, storage: Storage) => void;
-  updateStorage: (
-    configId: string,
-    storageIdentifier: string,
-    updates: Partial<Storage>,
-  ) => void;
-  deleteStorage: (configId: string, storageIdentifier: number) => void;
+  // --- Dependencies ---
+  setDependencyResolved: (fieldName: string, resolved: boolean) => void;
+  isDependencyResolved: (fieldName: string) => boolean;
 
-  // Module operations
-  addModule: (configId: string, module: Module, type: string) => void;
-  deleteModule: (configId: string, moduleName: string, type: string) => void;
+  // --- Loading ---
+  setFieldLoading: (fieldName: string, loading: boolean) => void;
+  isFieldLoading: (fieldName: string) => boolean;
 
-  // Bulk operationsk
-  clearAllConfigs: () => void;
-  setConfigs: (configs: Config[]) => void;
+  // --- Field state lifecycle ---
+  resetFieldState: () => void;
+
+  getConfig: (configId: string) => unknown;
+  getAllConfigs: () => Record<string, unknown>;
 }
 
 // Combined store type

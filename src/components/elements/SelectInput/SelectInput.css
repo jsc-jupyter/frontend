@@ -23,6 +23,7 @@
   border: 1px solid #ced4da;
   border-radius: 0.375rem;
   background-color: #fff;
+  color: black;
   cursor: pointer;
   transition: border-color 0.15s ease-in-out;
 }
@@ -65,6 +66,7 @@
   cursor: pointer;
   border-radius: 0.25rem;
   user-select: none;
+  color: black;
 }
 
 .select-input__item:hover,

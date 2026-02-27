@@ -21,7 +21,6 @@ const SelectInput = ({
   const labelId = useId();
   const opts = elementOptions.input?.options ?? {};
   const values = elementOptions.input?.values ?? {};
-  const entries = Object.entries(values);
 
   const defaultValue =
     opts.value != null && opts.value !== "" ? String(opts.value) : undefined;
@@ -67,7 +66,7 @@ const SelectInput = ({
                 <ChevronUpIcon />
               </Select.ScrollUpButton>
               <Select.Viewport className="select-input__viewport">
-                {entries.map(([key, label]) => (
+                {Object.entries(values).map(([key, label]) => (
                   <Select.Item
                     key={key}
                     value={key}

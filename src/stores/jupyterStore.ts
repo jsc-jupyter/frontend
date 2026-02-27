@@ -1,187 +1,145 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { ConfigStore, Config } from "./config";
+import { ConfigStore } from "./config";
+import { getFrontendCollection } from "@/utils/frontendCollectionHelper";
+import { getFrontendConfig } from "@/utils/frontendConfigHelper";
+
+// ---------------------------------------------------------------------------
+// Initialise collectedFields from the frontend config (moved from fieldStore)
+// ---------------------------------------------------------------------------
+const frontendConfig = getFrontendConfig();
+
+const initialCollectedFields: Record<string, boolean> = Object.values(
+  frontendConfig.services.options[frontendConfig.services.default].tabs,
+).reduce(
+  (acc, tab) => {
+    Object.entries(tab).forEach(([_, fieldConfig]) => {
+      Object.entries(fieldConfig as Record<string, unknown>).forEach(
+        ([fieldName, config]) => {
+          if (
+            (config as Record<string, Record<string, Record<string, unknown>>>)
+              .input?.options?.collect ??
+            true
+          ) {
+            acc[fieldName] = true;
+          } else {
+            acc[fieldName] = false;
+          }
+        },
+      );
+    });
+    return acc;
+  },
+  {} as Record<string, boolean>,
+);
+
+// ---------------------------------------------------------------------------
 
 export const useConfigStore = create<ConfigStore>()(
   devtools(
     immer((set, get) => ({
       // Initial state
-      configs: [],
+      frontendCollection: getFrontendCollection(),
+      collectedFields: initialCollectedFields,
+      resolvedDependencies: {},
+      loadingFields: {},
 
-      // Config operations
-      addConfig: (configData) => {
-        set((state) => {
-          const newConfig: Config = {
-            ...configData,
-          };
-          state.configs.push(newConfig);
-        });
+      // --- Field value access (single source of truth: frontendCollection) ---
+
+      getFieldValue: (configId: string, fieldName: string) => {
+        const opts = get().frontendCollection.decrypted_user_options[configId];
+        return opts ? (opts as Record<string, unknown>)[fieldName] : undefined;
       },
 
-      updateConfig: (id, updates) => {
+      setFieldValue: (configId: string, fieldName: string, value: unknown) => {
         set((state) => {
-          const index = state.configs.findIndex((c) => c.id === id);
-          if (index !== -1) {
-            state.configs[index] = { ...state.configs[index], ...updates };
+          if (state.frontendCollection.decrypted_user_options[configId]) {
+            (
+              state.frontendCollection.decrypted_user_options[
+                configId
+              ] as Record<string, unknown>
+            )[fieldName] = value;
           }
         });
       },
 
-      deleteConfig: (id) => {
+      getAllFieldValues: (configId: string) => {
+        const opts = get().frontendCollection.decrypted_user_options[configId];
+        return opts ? { ...(opts as Record<string, unknown>) } : {};
+      },
+
+      // --- Collected fields ---
+
+      registerCollected: (fieldName: string) => {
         set((state) => {
-          state.configs = state.configs.filter((c) => c.id !== id);
+          state.collectedFields[fieldName] = true;
         });
       },
 
-      getConfigById: (id) => {
-        return get().configs.find((c) => c.id === id);
-      },
-
-      getConfigByIndex: (index) => {
-        return get().configs[index];
-      },
-
-      addEnvironment: (configId, environment) => {
+      unregisterCollected: (fieldName: string) => {
         set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            config.environments.push(environment);
+          delete state.collectedFields[fieldName];
+        });
+      },
+
+      getCollectedValues: (configId: string) => {
+        const { collectedFields } = get();
+        const opts = get().frontendCollection.decrypted_user_options[configId];
+        if (!opts) return {};
+        const result: Record<string, unknown> = {};
+        for (const key of Object.keys(collectedFields)) {
+          if (
+            collectedFields[key] &&
+            key in (opts as Record<string, unknown>)
+          ) {
+            result[key] = (opts as Record<string, unknown>)[key];
           }
+        }
+        return result;
+      },
+
+      // --- Dependencies ---
+
+      setDependencyResolved: (fieldName: string, resolved: boolean) => {
+        set((state) => {
+          state.resolvedDependencies[fieldName] = resolved;
         });
       },
 
-      updateEnvironment: (configId, envName, updates) => {
+      isDependencyResolved: (fieldName: string) =>
+        get().resolvedDependencies[fieldName] ?? false,
+
+      // --- Loading ---
+
+      setFieldLoading: (fieldName: string, loading: boolean) => {
         set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            const envIndex = config.environments.findIndex(
-              (e) => e.name === envName,
-            );
-            if (envIndex !== -1) {
-              config.environments[envIndex] = {
-                ...config.environments[envIndex],
-                ...updates,
-              };
-            }
-          }
+          state.loadingFields[fieldName] = loading;
         });
       },
 
-      deleteEnvironment: (configId, envName) => {
-        set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            config.environments = config.environments.filter(
-              (e) => e.name !== envName,
-            );
-          }
-        });
+      isFieldLoading: (fieldName: string) =>
+        get().loadingFields[fieldName] ?? false,
+
+      // --- Config access ---
+
+      getConfig: (configId: string) => {
+        return get().frontendCollection.decrypted_user_options[
+          configId
+        ] as unknown;
       },
 
-      addStorage: (configId, storage) => {
-        set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            config.storages.push(storage);
-          }
-        });
+      getAllConfigs: () => {
+        return get().frontendCollection.decrypted_user_options;
       },
 
-      updateStorage: (configId, storageIdentifier, updates) => {
-        set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            const storageIndex = config.storages.findIndex(
-              (s) => s.id === storageIdentifier,
-            );
-            if (storageIndex !== -1) {
-              config.storages[storageIndex] = {
-                ...config.storages[storageIndex],
-                ...updates,
-              };
-            }
-          }
-        });
-      },
+      // --- Field state lifecycle ---
 
-      deleteStorage: (configId, storageIdentifier) => {
+      resetFieldState: () => {
         set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            config.storages = config.storages.filter(
-              (s) => s.id !== storageIdentifier,
-            );
-          }
-        });
-      },
-
-      addModule(configId, module, type) {
-        set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            switch (type) {
-              case "communities":
-                config.communities.push(module);
-                break;
-              case "extensions":
-                config.extensions.push(module);
-                break;
-              case "kernels":
-                config.kernels.push(module);
-                break;
-              case "proxies":
-                config.proxies.push(module);
-                break;
-              default:
-                break;
-            }
-          }
-        });
-      },
-
-      deleteModule(configId, moduleName, type) {
-        set((state) => {
-          const config = state.configs.find((c) => c.id === configId);
-          if (config) {
-            switch (type) {
-              case "communities":
-                config.communities = config.communities.filter(
-                  (m) => m.name !== moduleName,
-                );
-                console.log("after delete", config.communities);
-                break;
-              case "extensions":
-                config.extensions = config.extensions.filter(
-                  (m) => m.name !== moduleName,
-                );
-                break;
-              case "kernels":
-                config.kernels = config.kernels.filter(
-                  (m) => m.name !== moduleName,
-                );
-                break;
-              case "proxies":
-                config.proxies = config.proxies.filter(
-                  (m) => m.name !== moduleName,
-                );
-                break;
-              default:
-                break;
-            }
-          }
-        });
-      },
-
-      clearAllConfigs: () => {
-        set((state) => {
-          state.configs = [];
-        });
-      },
-
-      setConfigs: (configs) => {
-        set((state) => {
-          state.configs = configs;
+          state.collectedFields = { ...initialCollectedFields };
+          state.resolvedDependencies = {};
+          state.loadingFields = {};
         });
       },
     })),

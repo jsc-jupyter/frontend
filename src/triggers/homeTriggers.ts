@@ -6,6 +6,15 @@ import {
 // TODO: ONLY TRIGGER STUBS --> IMPLEMENT
 
 const homeTriggerOption: TriggerFunction = async (value, ctx) => {
+  const values = ["4.3", "4.2", "3.6", "repo2docker", "xpra", "custom"];
+  const displayValues = [
+    "JupyterLab 4.3",
+    "JupyterLab 4.2",
+    "JupyterLab 3.6",
+    "Repo2Docker",
+    "Xpra",
+    "Custom",
+  ];
   console.log(
     `[trigger:homeTriggerOption] field=${ctx.fieldName} value=`,
     value,
@@ -14,6 +23,8 @@ const homeTriggerOption: TriggerFunction = async (value, ctx) => {
 };
 
 const homeTriggerSystem: TriggerFunction = async (value, ctx) => {
+  const values = ["JSC-Cloud", "JUWELS", "JUSUF", "JURECA", "Jupiter"];
+  const displayValues = ["JSC-Cloud", "JUWELS", "JUSUF", "JURECA", "Jupiter"];
   console.log(
     `[trigger:homeTriggerSystem] field=${ctx.fieldName} value=`,
     value,

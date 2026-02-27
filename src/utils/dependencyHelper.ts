@@ -9,6 +9,12 @@ export function evaluateDependency(
   dependency: Dependency | undefined,
   currentValues: Record<string, unknown>,
 ): DependencyResult {
+  console.log(
+    "Evaluating dependency:",
+    dependency,
+    "with current values:",
+    currentValues,
+  );
   if (!dependency) {
     return { visible: true, disabled: false };
   }
@@ -29,7 +35,13 @@ export function evaluateDependency(
     const currentStr = String(currentValue).toLowerCase();
     const allowed = (allowedValues as string[]).map((v) => v.toLowerCase());
 
-    if (!allowed.includes(currentStr)) {
+    //Check if contains a dash and then remove it for comparison
+    const currentStrWithoutDash = currentStr.replace(/-/g, "");
+
+    if (
+      !allowed.includes(currentStrWithoutDash) &&
+      !allowed.includes(currentStr)
+    ) {
       return { visible: false, disabled: true };
     }
   }
