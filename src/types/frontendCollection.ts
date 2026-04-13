@@ -1,3 +1,5 @@
+import { FormType } from "@/components/form/shared";
+
 type PartitionSystems =
   | "juwels"
   | "juwels_booster"
@@ -258,7 +260,7 @@ type serviceOption = {
 type options = { [key: string]: serviceOption };
 
 type serviceConfig = {
-  JupyterLab: {
+  jupyterlab: {
     allowedGroups: string[];
     defaultOption: string;
     optionsName: string;

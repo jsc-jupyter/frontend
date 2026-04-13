@@ -8,6 +8,10 @@ export interface ServicesConfig {
 }
 
 export interface ServiceConfig {
+  default: {
+    tab: string;
+    options: Record<string, string>;
+  };
   fillingOrder: string[];
   navbar: Record<string, NavbarItem>;
   tabs: Record<string, TabConfig>;

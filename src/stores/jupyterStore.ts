@@ -5,10 +5,8 @@ import { ConfigStore } from "./config";
 import { getFrontendCollection } from "@/utils/frontendCollectionHelper";
 import { getFrontendConfig } from "@/utils/frontendConfigHelper";
 
-// ---------------------------------------------------------------------------
-// Initialise collectedFields from the frontend config (moved from fieldStore)
-// ---------------------------------------------------------------------------
 const frontendConfig = getFrontendConfig();
+const frontendCollection = getFrontendCollection();
 
 const initialCollectedFields: Record<string, boolean> = Object.values(
   frontendConfig.services.options[frontendConfig.services.default].tabs,
@@ -34,32 +32,88 @@ const initialCollectedFields: Record<string, boolean> = Object.values(
   {} as Record<string, boolean>,
 );
 
+for (const defaultValue in frontendConfig.services.options[
+  frontendConfig.services.default
+].default.options) {
+  // property does not yet exists in FrontendCollection, seed it from frontendConfig defaults
+  frontendCollection.decrypted_user_options[""][defaultValue] =
+    frontendConfig.services.options[
+      frontendConfig.services.default
+    ].default.options[defaultValue];
+}
+frontendCollection.decrypted_user_options[""].profile = frontendCollection.decrypted_user_options[""].option;
+
 // ---------------------------------------------------------------------------
 
 export const useConfigStore = create<ConfigStore>()(
   devtools(
     immer((set, get) => ({
       // Initial state
-      frontendCollection: getFrontendCollection(),
+      frontendCollection: frontendCollection,
       collectedFields: initialCollectedFields,
-      resolvedDependencies: {},
-      loadingFields: {},
-
       // --- Field value access (single source of truth: frontendCollection) ---
 
-      getFieldValue: (configId: string, fieldName: string) => {
+      getFieldValue: (configId: string, fieldName: string, group?: string) => {
         const opts = get().frontendCollection.decrypted_user_options[configId];
+        if (group && group !== "default") {
+          return opts
+            ? (opts as Record<string, unknown>)[group]?.[fieldName]
+            : undefined;
+        }
         return opts ? (opts as Record<string, unknown>)[fieldName] : undefined;
       },
 
-      setFieldValue: (configId: string, fieldName: string, value: unknown) => {
+      // getFieldValues: (configId: string, fieldNames: string[], group?: string[]) => {
+      //   const opts = get().frontendCollection.decrypted_user_options[configId];
+      //   const result: Record<string, unknown> = {};
+      //   if (!opts) return result;
+      //   for (const fieldName of fieldNames) {
+      //     if
+      //     if (group && group !== "default") {
+      //       result[fieldName] = (opts as Record<string, unknown>)[group]?.[fieldName];
+      //     } else {
+      //       result[fieldName] = (opts as Record<string, unknown>)[fieldName];
+      //     }
+      //   }
+      //   return result;
+      // },
+
+      setFieldValue: (
+        configId: string,
+        fieldName: string,
+        value: unknown,
+        group?: string,
+      ) => {
         set((state) => {
-          if (state.frontendCollection.decrypted_user_options[configId]) {
-            (
-              state.frontendCollection.decrypted_user_options[
-                configId
-              ] as Record<string, unknown>
-            )[fieldName] = value;
+          console.log("Setting field value: ", {
+            configId,
+            fieldName,
+            value,
+            group,
+          });
+          if (group && group !== "default") {
+            if (state.frontendCollection.decrypted_user_options[configId]) {
+              const groupObj =
+                (
+                  state.frontendCollection.decrypted_user_options[
+                    configId
+                  ] as Record<string, unknown>
+                )[group] ?? {};
+              groupObj[fieldName] = value;
+              (
+                state.frontendCollection.decrypted_user_options[
+                  configId
+                ] as Record<string, unknown>
+              )[group] = groupObj;
+            }
+          } else {
+            if (state.frontendCollection.decrypted_user_options[configId]) {
+              (
+                state.frontendCollection.decrypted_user_options[
+                  configId
+                ] as Record<string, unknown>
+              )[fieldName] = value;
+            }
           }
         });
       },
@@ -98,42 +152,6 @@ export const useConfigStore = create<ConfigStore>()(
         }
         return result;
       },
-
-      // --- Dependencies ---
-
-      setDependencyResolved: (fieldName: string, resolved: boolean) => {
-        set((state) => {
-          state.resolvedDependencies[fieldName] = resolved;
-        });
-      },
-
-      isDependencyResolved: (fieldName: string) =>
-        get().resolvedDependencies[fieldName] ?? false,
-
-      // --- Loading ---
-
-      setFieldLoading: (fieldName: string, loading: boolean) => {
-        set((state) => {
-          state.loadingFields[fieldName] = loading;
-        });
-      },
-
-      isFieldLoading: (fieldName: string) =>
-        get().loadingFields[fieldName] ?? false,
-
-      // --- Config access ---
-
-      getConfig: (configId: string) => {
-        return get().frontendCollection.decrypted_user_options[
-          configId
-        ] as unknown;
-      },
-
-      getAllConfigs: () => {
-        return get().frontendCollection.decrypted_user_options;
-      },
-
-      // --- Field state lifecycle ---
 
       resetFieldState: () => {
         set((state) => {

@@ -1,5 +1,4 @@
 import React, { StrictMode } from "react";
-import ThemePicker from "../ThemePicker";
 import jscLogo from "../../../images/header/jsc.png";
 import jupyterLogo from "../../../images/header/jupyterjsc.png";
 
@@ -26,7 +25,6 @@ const Header = () => {
           <a className="header-link" href="">
             Credits
           </a>
-          <ThemePicker />
         </div>
         <div
           style={{

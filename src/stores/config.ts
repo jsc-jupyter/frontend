@@ -16,28 +16,23 @@ export interface ConfigState {
 
 // Store actions type
 export interface ConfigActions {
-  getFieldValue: (configId: string, fieldName: string) => unknown;
-  setFieldValue: (configId: string, fieldName: string, value: unknown) => void;
+  getFieldValue: (
+    configId: string,
+    fieldName: string,
+    group?: string,
+  ) => unknown;
+  setFieldValue: (
+    configId: string,
+    fieldName: string,
+    value: unknown,
+    group?: string,
+  ) => void;
   getAllFieldValues: (configId: string) => Record<string, unknown>;
 
   // --- Collected fields ---
   registerCollected: (fieldName: string) => void;
   unregisterCollected: (fieldName: string) => void;
   getCollectedValues: (configId: string) => Record<string, unknown>;
-
-  // --- Dependencies ---
-  setDependencyResolved: (fieldName: string, resolved: boolean) => void;
-  isDependencyResolved: (fieldName: string) => boolean;
-
-  // --- Loading ---
-  setFieldLoading: (fieldName: string, loading: boolean) => void;
-  isFieldLoading: (fieldName: string) => boolean;
-
-  // --- Field state lifecycle ---
-  resetFieldState: () => void;
-
-  getConfig: (configId: string) => unknown;
-  getAllConfigs: () => Record<string, unknown>;
 }
 
 // Combined store type

@@ -1,5 +1,6 @@
+import { useCombinedStore } from "@/stores/combinedStore";
 import type { Dependency } from "@/types/frontendConfig";
-
+const mappingdict = useCombinedStore.getState().fillMappingDict();
 export interface DependencyResult {
   visible: boolean;
   disabled: boolean;
@@ -9,19 +10,11 @@ export function evaluateDependency(
   dependency: Dependency | undefined,
   currentValues: Record<string, unknown>,
 ): DependencyResult {
-  console.log(
-    "Evaluating dependency:",
-    dependency,
-    "with current values:",
-    currentValues,
-  );
   if (!dependency) {
     return { visible: true, disabled: false };
   }
-
   for (const [depField, allowedValues] of Object.entries(dependency)) {
     const currentValue = currentValues[depField];
-
     // Dependency field has no value yet → hide
     if (
       currentValue === undefined ||
@@ -37,10 +30,11 @@ export function evaluateDependency(
 
     //Check if contains a dash and then remove it for comparison
     const currentStrWithoutDash = currentStr.replace(/-/g, "");
-
+    const mappedvalues = mappingdict["jupyterlab"]?.[depField]?.[currentValue];
     if (
       !allowed.includes(currentStrWithoutDash) &&
-      !allowed.includes(currentStr)
+      !allowed.includes(currentStr) &&
+      !allowed.includes(mappedvalues?.toLowerCase())
     ) {
       return { visible: false, disabled: true };
     }

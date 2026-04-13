@@ -2,8 +2,14 @@ import { useConfigStore } from "./jupyterStore";
 
 // --- Field value access ---
 
-export const useGetFieldValue = (configId: string, fieldName: string) => {
-  return useConfigStore((state) => state.getFieldValue(configId, fieldName));
+export const useGetFieldValue = (
+  configId: string,
+  fieldName: string,
+  group?: string,
+) => {
+  return useConfigStore((state) =>
+    state.getFieldValue(configId, fieldName, group),
+  );
 };
 
 // Get a single config by ID
