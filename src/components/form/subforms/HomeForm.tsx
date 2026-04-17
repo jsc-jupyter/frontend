@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useConfigStore } from "@/stores";
 import {
   homeTriggerOption,
   homeTriggerSystem,
@@ -11,7 +10,10 @@ import { Repo2DockerForm } from "./Repo2DockerForm";
 import { CustomDockerForm } from "./CustomDockerForm";
 import FlavorInfo from "../../FlavorInfo/FlavorInfo";
 import FlavorLegend from "../../FlavorLegend/FlavorLegend";
-import { getBackendServices, getSystemConfig } from "@/utils/frontendCollectionHelper";
+import {
+  getBackendServices,
+  getSystemConfig,
+} from "@/utils/frontendCollectionHelper";
 import { defaultFormValues } from "../shared";
 
 interface Option {
@@ -88,7 +90,7 @@ export const HomeForm = withForm({
             <>
               {getSystemType(system) === "unicore" && (
                 <>
-                  <HPCForm form={form} configId={configId} system={system} />
+                  <HPCForm form={form} configId={configId} />
                 </>
               )}
             </>
@@ -99,11 +101,7 @@ export const HomeForm = withForm({
             <>
               {option === "custom" && (
                 <>
-                  <CustomDockerForm
-                    form={form}
-                    configId={configId}
-                    system={form.getFieldValue("system")}
-                  />
+                  <CustomDockerForm form={form} />
                 </>
               )}
             </>
@@ -114,11 +112,7 @@ export const HomeForm = withForm({
             <>
               {option === "repo2docker" && (
                 <>
-                  <Repo2DockerForm
-                    form={form}
-                    configId={configId}
-                    system={form.getFieldValue("system")}
-                  />
+                  <Repo2DockerForm form={form} />
                 </>
               )}
             </>

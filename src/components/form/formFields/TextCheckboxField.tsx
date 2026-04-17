@@ -10,9 +10,11 @@ interface TextFieldProps {
   copy?: boolean;
   pattern?: string;
   warning?: string;
+  checked?: boolean;
+  onCheckboxChange?: (checked: boolean) => void;
 }
 
-function TextField({
+function TextCheckboxField({
   label,
   required = false,
   enabled,
@@ -21,7 +23,14 @@ function TextField({
   copy = false,
   pattern,
   warning,
+  checked,
+  onCheckboxChange,
 }: TextFieldProps) {
+  const handleCheckboxChange = (checked: boolean) => {
+    if (onCheckboxChange) {
+      onCheckboxChange(checked);
+    }
+  };
   return (
     <div
       style={{
@@ -32,12 +41,18 @@ function TextField({
         marginBottom: "0.25rem",
       }}
     >
-      <LabelField label={label} htmlFor={label} />
+      <LabelField
+        label={label}
+        htmlFor={label}
+        hasCheckbox={true}
+        checked={checked}
+        onCheckboxChange={handleCheckboxChange}
+      />
 
       <TextInput
         label={label}
         required={required}
-        enabled={enabled}
+        enabled={checked ? enabled : false}
         placeholder={placeholder}
         secret={secret}
         copy={copy}
@@ -47,4 +62,4 @@ function TextField({
     </div>
   );
 }
-export default TextField;
+export default TextCheckboxField;

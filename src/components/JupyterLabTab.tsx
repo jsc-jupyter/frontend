@@ -1,33 +1,22 @@
 import React from "react";
 import { Tabs } from "radix-ui";
-import { JupyterlabIDContext, useConfigStore } from "../stores";
 import { getFrontendConfig } from "@/utils/frontendConfigHelper";
 import { evaluateDependency } from "@/utils/dependencyHelper";
 import ButtonRow from "./ButtonRow";
-import { formSchema, FormType } from "@/components/form/shared";
 import { HomeForm } from "./form/subforms/HomeForm";
-import { useAppForm } from "@/hooks/formContext";
 import { EnvVariablesForm } from "./form/subforms/EnvVariablesForm";
 import { ResourcesForm } from "./form/subforms/ResourceForm";
 import { StorageForm } from "./form/subforms/StorageForm";
 import { ModuleForm } from "./form/subforms/ModuleForm";
-import { buildHumanReadableQuery } from "@/utils/APIUtils";
+import { getUserOption } from "@/utils/frontendCollectionHelper";
 
 interface JupyterLabTabProps {
+  form: any;
   configId: string;
 }
 
-const JupyterLabTab = ({ configId }: JupyterLabTabProps) => {
-  const allValues =
-    useConfigStore(
-      (s) =>
-        s.frontendCollection.decrypted_user_options[configId] as
-          | Record<string, unknown>
-          | undefined,
-    ) ?? {};
-  const userOptions = useConfigStore(
-    (s) => s.frontendCollection.decrypted_user_options[configId],
-  ) as FormType;
+const JupyterLabTab = ({ form, configId }: JupyterLabTabProps) => {
+  const allValues = getUserOption(configId);
   const frontendConfig = getFrontendConfig();
   const tabs =
     frontendConfig.services.options[frontendConfig.services.default].navbar;
@@ -42,53 +31,6 @@ const JupyterLabTab = ({ configId }: JupyterLabTabProps) => {
     frontendConfig.services.options[frontendConfig.services.default].tabs[
       "buttonrow"
     ];
-  let envArray: { name: string; value: string }[] = [];
-  envArray = Object.entries(userOptions?.envvariables ?? {}).map(
-    ([name, value]) => ({ name, value }),
-  );
-
-  // Storage is datamount-1, datamount-2, ...
-  // Map datamount element_id to vendor
-  const storageArray = Object.entries(userOptions ?? {})
-    .filter(([key, _]) => key.startsWith("datamount-"))
-    .map(([_, value]) => ({
-      ...value,
-      vendor: value.element_id,
-      relativemountpath: value.path,
-      readonly: value.readonly === "readonly" || value.readonly === true,
-    }));
-
-  const mergedOptions = {
-    ...userOptions,
-    envvariables: envArray as FormType["envvariables"],
-    storage: {
-      mounts: storageArray,
-      localstorage: userOptions.storage?.localstoragepath ?? "",
-    },
-  };
-  console.log("Merged options for form initialization: ", mergedOptions);
-  const parsed = formSchema.parse(mergedOptions);
-  console.log("Parsed form values: ", parsed);
-  // Initialize form with default values and schema
-  const form = useAppForm({
-    defaultValues: parsed,
-    validators: {
-      onChange: formSchema,
-    },
-    onSubmit: ({ value, meta }) => {
-      switch (meta) {
-        case "url":
-          console.log("Generated URL Query: ", buildHumanReadableQuery(value));
-          break;
-        case "reset":
-          form.reset();
-          break;
-        default:
-          // Handle other submit triggers if necessary
-          break;
-      }
-    },
-  });
 
   return (
     <Tabs.Root
@@ -112,45 +54,43 @@ const JupyterLabTab = ({ configId }: JupyterLabTabProps) => {
         ))}
       </Tabs.List>
 
-      <JupyterlabIDContext value={configId}>
-        <form
-          key={configId}
-          style={{ width: "100%" }}
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
-          }}
-        >
-          {Object.entries(tabs).map(([tabKey, _tabConfig]) => (
-            <Tabs.Content
-              key={tabKey}
-              value={tabKey}
-              className="jupyter-lab-tabs__content"
-            >
-              {tabKey === "labconfig" && <HomeForm form={form} />}
-              {tabKey === "envvariables" && <EnvVariablesForm form={form} />}
-              {tabKey === "resources" && <ResourcesForm form={form} />}
-              {tabKey === "storage" && <StorageForm form={form} />}
-              {tabKey === "modules" && <ModuleForm form={form} />}
-              <ButtonRow
-                buttonRowConfig={buttonrowConfig.center.buttonrow}
-                rowId={configId}
-                serviceId={frontendConfig.services.default}
-              />
-              <form.AppForm>
-                <form.start label="Submit" />
-              </form.AppForm>
-              <form.AppForm>
-                <form.url />
-              </form.AppForm>
-              <form.AppForm>
-                <form.reset />
-              </form.AppForm>
-            </Tabs.Content>
-          ))}
-        </form>
-      </JupyterlabIDContext>
+      <form
+        key={configId}
+        style={{ width: "100%" }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          form.handleSubmit();
+        }}
+      >
+        {Object.entries(tabs).map(([tabKey, _tabConfig]) => (
+          <Tabs.Content
+            key={tabKey}
+            value={tabKey}
+            className="jupyter-lab-tabs__content"
+          >
+            {tabKey === "labconfig" && <HomeForm form={form} />}
+            {tabKey === "envvariables" && <EnvVariablesForm form={form} />}
+            {tabKey === "resources" && <ResourcesForm form={form} />}
+            {tabKey === "storage" && <StorageForm form={form} />}
+            {tabKey === "modules" && <ModuleForm form={form} />}
+            <ButtonRow
+              buttonRowConfig={buttonrowConfig.center.buttonrow}
+              rowId={configId}
+              serviceId={frontendConfig.services.default}
+            />
+            <form.AppForm>
+              <form.start label="Submit" />
+            </form.AppForm>
+            <form.AppForm>
+              <form.url />
+            </form.AppForm>
+            <form.AppForm>
+              <form.reset />
+            </form.AppForm>
+          </Tabs.Content>
+        ))}
+      </form>
     </Tabs.Root>
   );
 };

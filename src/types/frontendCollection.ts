@@ -1,5 +1,3 @@
-import { FormType } from "@/components/form/shared";
-
 type PartitionSystems =
   | "juwels"
   | "juwels_booster"

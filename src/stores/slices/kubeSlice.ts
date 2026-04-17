@@ -1,11 +1,12 @@
 import { StateCreator } from "zustand";
 import type { CombinedStore, KubeSlice } from "./types";
-import { useConfigStore } from "../jupyterStore";
+import {
+  getBackendServices,
+  getSystemConfig,
+} from "@/utils/frontendCollectionHelper";
 
-const systemConfig =
-  useConfigStore.getState().frontendCollection.systemConfig || {};
-const backendServicesConfig =
-  useConfigStore.getState().frontendCollection.backendServices || {};
+const systemConfig = getSystemConfig();
+const backendServicesConfig = getBackendServices();
 
 const kubeOutpostFlavors = window.getAuthState()?.outpost_flavors || true;
 

@@ -20,7 +20,7 @@ export const REPOPATHTYPE = [
 export const TemplateOptions = [
   { value: "b2drop", label: "B2Drop" },
   { value: "aws", label: "AWS" },
-  { value: "s3compatible", label: "S3 Compliant Storage Provider" },
+  { value: "s3", label: "S3 Compliant Storage Provider" },
   { value: "webdav", label: "Webdav" },
 ] as const;
 
@@ -34,27 +34,29 @@ export const VendorOptions = [
 const StorageBaseSchema = z.object({
   relativemountpath: z.string(),
   readonly: z.optional(z.boolean()),
-  obscure_pass: z.optional(z.string()),
 });
 
 const B2DropSchema = StorageBaseSchema.extend({
   template: z.literal("b2drop"),
   user: z.optional(z.string()),
+  obscure_pass: z.optional(z.string()),
   path: z.optional(z.string()),
 });
 
 const AWSSchema = StorageBaseSchema.extend({
   template: z.literal("aws"),
-  username: z.optional(z.string()),
-  bucketname: z.optional(z.string()),
+  access_key_id: z.optional(z.string()),
+  secret_access_key: z.optional(z.string()),
+  remotepath: z.optional(z.string()),
   region: z.string(),
 });
 
 const S3CompatibleProviderSchema = StorageBaseSchema.extend({
-  template: z.literal("s3compatible"),
-  username: z.optional(z.string()),
-  providername: z.string(),
-  bucketname: z.optional(z.string()),
+  template: z.literal("s3"),
+  access_key_id: z.optional(z.string()),
+  secret_access_key: z.optional(z.string()),
+  provider: z.string(),
+  remotepath: z.optional(z.string()),
   endpoint: z.optional(z.string()),
   region: z.optional(z.string()),
 });
@@ -62,10 +64,11 @@ const S3CompatibleProviderSchema = StorageBaseSchema.extend({
 const WebdavSchema = StorageBaseSchema.extend({
   template: z.literal("webdav"),
   user: z.optional(z.string()),
+  obscure_pass: z.optional(z.string()),
   path: z.string(),
   url: z.string(),
   vendor: z.string(),
-  bearertoken: z.optional(z.string()),
+  bearer_token: z.optional(z.string()),
 });
 
 export const StorageSchema = z.discriminatedUnion("template", [
@@ -77,7 +80,6 @@ export const StorageSchema = z.discriminatedUnion("template", [
 
 const repo2docker = z.optional(
   z.object({
-    repo2dockerdirectlink: z.optional(z.string()),
     repotype: z.optional(z.enum(REPOTYPE.map((r) => r.value))),
     repourl: z.optional(z.string()),
     reporef: z.optional(z.string()),
@@ -129,17 +131,16 @@ export const formSchema = z.object({
   flavor: z.optional(z.string()),
   modules: z.optional(z.record(z.string(), z.array(z.string()))),
   modules_versions: z.optional(z.record(z.string(), z.array(z.string()))),
-  envvariables: z.optional(z.array(envVariable)),
+  envvariables: z.array(envVariable),
   workshop_id: z.optional(z.boolean()), // Remove optional after testing
   secret_keys: z.array(z.string()).default([]),
   share_id: z.optional(z.string()),
   resources: resources,
-  storage: z.optional(
-    z.object({
-      mounts: z.array(StorageSchema),
-      localstoragepath: z.optional(z.string()),
-    }),
-  ),
+  storage: z.object({
+    mounts: z.array(StorageSchema),
+    localstoragepath: z.optional(z.string()).default("/home/jovyan/work"),
+  }),
+
   repo2dockerdirectlink: z.optional(z.string()),
   repo2docker: repo2docker,
   custom: custom,
@@ -170,7 +171,6 @@ export const defaultFormValues: FormType = {
   },
   repo2docker: {
     localstoragepath: "",
-    repo2dockerdirectlink: "",
     repopath: "",
     reporef: "",
     repourl: "",

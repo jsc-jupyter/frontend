@@ -1,12 +1,12 @@
 import React from "react";
 import JupyterlabCollapsibleRow from "./JupyterLabCollabsibleRow";
-import { useAllConfigs } from "@/stores";
+import { getUserOptions } from "@/utils/frontendCollectionHelper";
 
 // TODO : Refactor inline styles to CSS or styled-components
 // TODO : Better handling
 
 const Table = () => {
-  const configs = useAllConfigs();
+  const configs = getUserOptions();
   return (
     <table
       className="table table-bordered table-striped table-hover table-light align-middle"

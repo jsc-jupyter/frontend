@@ -9,6 +9,7 @@ interface ElementLabelProps {
   labelOptions?: LabelOptions;
   htmlFor?: string;
   disabled?: boolean;
+  hasCheckbox?: boolean;
   checked?: boolean;
   onCheckboxChange?: (checked: boolean) => void;
 }
@@ -18,6 +19,9 @@ function LabelField({
   labelOptions = {},
   htmlFor,
   disabled = false,
+  checked,
+  onCheckboxChange,
+  hasCheckbox = false,
 }: ElementLabelProps) {
   const {
     type: labelType = "",
@@ -66,7 +70,6 @@ function LabelField({
       </Tooltip.Root>
     </Tooltip.Provider>
   );
-
   return (
     <div
       className={`element-label`}
@@ -77,6 +80,17 @@ function LabelField({
 
         {(hasTooltipIcon || hasClickIcon) && tooltipContent}
       </Label.Root>
+      {hasCheckbox && (
+        <input
+          type="checkbox"
+          className="element-label__checkbox"
+          name={label}
+          checked={checked}
+          onChange={(e) =>
+            onCheckboxChange && onCheckboxChange(e.target.checked)
+          }
+        />
+      )}
     </div>
   );
 }

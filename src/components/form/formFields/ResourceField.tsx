@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import "../text.css";
 import "../label.css";
 import LabelField from "./LabelField";
-import { useConfigStore } from "@/stores/jupyterStore";
+import { getResourcesConfig } from "@/utils/frontendCollectionHelper";
 
 interface ResourceFieldProps {
   label: string;
@@ -38,9 +38,7 @@ function ResourceField({
   const [defaultValue, setDefaultValue] = useState(1);
   const [show, setShow] = useState(false);
 
-  const resourcesConfig = useConfigStore(
-    (s) => s.frontendCollection.resourcesConfig,
-  );
+  const resourcesConfig = getResourcesConfig();
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(field.state.value);

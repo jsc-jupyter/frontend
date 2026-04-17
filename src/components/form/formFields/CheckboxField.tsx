@@ -7,9 +7,7 @@ interface CheckboxFieldProps {
   label: string;
 }
 
-function CheckboxField({
-  label,
-}: CheckboxFieldProps) {
+function CheckboxField({ label }: CheckboxFieldProps) {
   const field = useFieldContext<boolean>();
   return (
     <div className="text-input">

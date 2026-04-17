@@ -1,16 +1,14 @@
 import { withForm } from "@/hooks/formContext";
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import "../envForm.css";
+import { defaultFormValues } from "../shared";
 
 export const EnvVariablesForm = withForm({
-  defaultValues: {
-    envvariables: [{ name: "", value: "" }],
-  },
+  defaultValues: defaultFormValues,
   render: function Render({ form }) {
     const handleAdd = () => {
       form.pushFieldValue("envvariables", { name: "", value: "" });
     };
-
     return (
       <div className="env-variables-entry">
         <div className="env-variables-entry__header">

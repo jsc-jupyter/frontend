@@ -2,6 +2,7 @@ import { withForm } from "@/hooks/formContext";
 import { PlusIcon, TrashIcon } from "@radix-ui/react-icons";
 import "../select.css";
 import {
+  defaultFormValues,
   StorageSchema,
   TemplateOptions,
   VendorOptions,
@@ -28,47 +29,8 @@ const defaultb2drop: z.input<typeof StorageSchema> = {
   obscure_pass: "",
 };
 
-const defaultAWS: z.input<typeof StorageSchema> = {
-  template: "aws",
-  relativemountpath: "",
-  readonly: false,
-  bucketname: "",
-  region: "",
-  username: "",
-  obscure_pass: "",
-};
-
-const defaultS3: z.input<typeof StorageSchema> = {
-  template: "s3compatible",
-  relativemountpath: "",
-  readonly: false,
-  providername: "",
-  bucketname: "",
-  endpoint: "",
-  username: "",
-  obscure_pass: "",
-  region: "",
-};
-
-const defaultWebdav: z.input<typeof StorageSchema> = {
-  template: "webdav",
-  relativemountpath: "",
-  readonly: false,
-  path: "",
-  url: "",
-  vendor: "",
-  user: "",
-  obscure_pass: "",
-  bearertoken: "",
-};
-
 export const StorageForm = withForm({
-  defaultValues: {
-    storage: {
-      mounts: [defaultb2drop, defaultAWS, defaultS3, defaultWebdav],
-      localstorage: "",
-    },
-  },
+  defaultValues: defaultFormValues,
   render: function Render({ form }) {
     const [templateOptions, setTemplateOptions] = useState<Option>({
       options: {},
@@ -243,7 +205,7 @@ export const StorageForm = withForm({
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].bucketname`}
+                                                name={`storage.mounts[${i}].remotepath`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text label="Bucket Name" />
@@ -257,14 +219,14 @@ export const StorageForm = withForm({
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].username`}
+                                                name={`storage.mounts[${i}].access_key_id`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text label="Username" />
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].obscure_pass`}
+                                                name={`storage.mounts[${i}].secret_access_key`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text
@@ -275,7 +237,7 @@ export const StorageForm = withForm({
                                               </form.AppField>
                                             </>
                                           )}
-                                          {template === "s3compatible" && (
+                                          {template === "s3" && (
                                             <>
                                               <form.AppField
                                                 name={`storage.mounts[${i}].relativemountpath`}
@@ -300,14 +262,14 @@ export const StorageForm = withForm({
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].providername`}
+                                                name={`storage.mounts[${i}].provider`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text label="Provider" />
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].bucketname`}
+                                                name={`storage.mounts[${i}].remotepath`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text label="Bucket Name" />
@@ -322,14 +284,14 @@ export const StorageForm = withForm({
                                               </form.AppField>
 
                                               <form.AppField
-                                                name={`storage.mounts[${i}].username`}
+                                                name={`storage.mounts[${i}].access_key_id`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text label="Username" />
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].obscure_pass`}
+                                                name={`storage.mounts[${i}].secret_access_key`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text
@@ -428,7 +390,7 @@ export const StorageForm = withForm({
                                                 )}
                                               </form.AppField>
                                               <form.AppField
-                                                name={`storage.mounts[${i}].bearertoken`}
+                                                name={`storage.mounts[${i}].bearer_token`}
                                               >
                                                 {(subfield) => (
                                                   <subfield.text label="Bearer Token" />

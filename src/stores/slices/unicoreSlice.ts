@@ -5,11 +5,17 @@ import type {
   Unicore,
   EntitlementInfo,
 } from "./types";
-import { useConfigStore } from "../jupyterStore";
+import {
+  getDefaultPartitions,
+  getMapPartitions,
+  getMapSystems,
+  getReservations,
+  getResourcesConfig,
+  getSystemConfig,
+} from "@/utils/frontendCollectionHelper";
 
 // Extract necessary information from the frontend collection and auth state
-const resourcesConfig =
-  useConfigStore.getState().frontendCollection.resourcesConfig || {};
+const resourcesConfig = getResourcesConfig();
 
 const resPattern =
   /^urn:(?<namespace>.+?(?=:res:)):res:(?<systempartition>[^:]+):(?<project>[^:]+):act:(?<account>[^:]+):(?<accounttype>[^:]+)$/;
@@ -19,18 +25,11 @@ const entitlements = Array.isArray(
 )
   ? window.getAuthState().oauth_user.entitlements
   : [window.getAuthState().oauth_user.entitlements];
-const reservations =
-  useConfigStore.getState().frontendCollection.reservations || {};
-const mapSystems =
-  useConfigStore.getState().frontendCollection.mapSystems || {};
-const mapPartitions =
-  useConfigStore.getState().frontendCollection.mapPartitions || {};
-const defaultPartitions =
-  useConfigStore.getState().frontendCollection.defaultPartitions || {};
-const systemConfig =
-  useConfigStore.getState().frontendCollection.systemConfig || {};
-const backendServices =
-  useConfigStore.getState().frontendCollection.backendServices || {};
+const reservations = getReservations();
+const mapSystems = getMapSystems();
+const mapPartitions = getMapPartitions();
+const defaultPartitions = getDefaultPartitions();
+const systemConfig = getSystemConfig();
 
 const extractEntitlementsInfo = (entitlement: string) => {
   const match = resPattern.exec(entitlement);
@@ -317,8 +316,6 @@ function getUnicorePartitionsSAP(
   const partitions = [];
   let interactivePartitions = [];
   let allPartitions = [];
-  const systemConfig =
-    useConfigStore.getState().frontendCollection.systemConfig || {};
 
   systems.forEach((system) => {
     accounts.forEach((account) => {
@@ -433,8 +430,6 @@ function getUnicoreReservationsSAPP(
   partitions: string[],
 ) {
   const localreservations = [];
-  const systemConfig =
-    useConfigStore.getState().frontendCollection.systemConfig || {};
 
   systems.forEach((system) => {
     accounts.forEach((account) => {
@@ -476,11 +471,7 @@ function getUnicoreReservationsSAPP(
   return [...new Set(localreservations)];
 }
 
-function getAccountOptions(
-  system: string,
-  serviceId: string,
-  configId: string,
-) {
+function getAccountOptions(system: string) {
   //console.log("getAccountOptions system ", system);
   const systems = Array.isArray(system) ? system : [system];
   //console.log("getAccountOptions systems ", systems);
@@ -492,12 +483,7 @@ function getAccountOptions(
   return accounts.map((item) => [item, item]);
 }
 
-function getProjectOptions(
-  system: string,
-  account: string,
-  serviceId: string,
-  configId: string,
-) {
+function getProjectOptions(system: string, account: string) {
   const systems = Array.isArray(system) ? system : [system];
   let projects = [];
   if (account) {
@@ -513,8 +499,6 @@ function getPartitionOptions(
   system: string,
   account: string = "_all_",
   project: string = "_all_",
-  serviceId: string,
-  configId: string,
 ) {
   const systems = Array.isArray(system) ? system : [system];
   const accounts = Array.isArray(account) ? account : [account];
@@ -527,17 +511,9 @@ function getPartitionAndInteractivePartition(
   system: string,
   account: string = "_all_",
   project: string = "_all_",
-  serviceId: string,
-  configId: string,
 ) {
   const systems = Array.isArray(system) ? system : [system];
-  let partitions = getPartitionOptions(
-    system,
-    account,
-    project,
-    serviceId,
-    configId,
-  );
+  let partitions = getPartitionOptions(system, account, project);
   let interactivePartitionsLength = 0;
   const presetValues = false;
   //if (pageType(null) == pageType("workshop")) {
@@ -575,13 +551,10 @@ export const createUnicoreSlice: StateCreator<
     entitlements: Array.isArray(window.getAuthState().oauth_user.entitlements)
       ? window.getAuthState().oauth_user.entitlements
       : [window.getAuthState().oauth_user.entitlements],
-    reservations:
-      useConfigStore.getState().frontendCollection.reservations || {},
-    mapSystems: useConfigStore.getState().frontendCollection.mapSystems || {},
-    mapPartitions:
-      useConfigStore.getState().frontendCollection.mapPartitions || {},
-    defaultPartitions:
-      useConfigStore.getState().frontendCollection.defaultPartitions || {},
+    reservations: getReservations(),
+    mapSystems: getMapSystems(),
+    mapPartitions: getMapPartitions(),
+    defaultPartitions: getDefaultPartitions(),
     systemPartitions: _getUnicoreSystemPartitions(),
     systems: _getUnicoreSystems(),
     accountsBySystemPartition: _getAllUnicoreAccountsBySystemPartition(),

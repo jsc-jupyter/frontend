@@ -11,6 +11,7 @@ import { StartButton } from "@/components/form/formButtons/StartButton";
 import CheckboxField from "@/components/form/formFields/CheckboxField";
 import { UrlButton } from "@/components/form/formButtons/UrlButton";
 import { ResetButton } from "@/components/form/formButtons/ResetButton";
+import TextCheckboxField from "@/components/form/formFields/TextCheckboxField";
 
 export const { useAppForm, withForm, withFieldGroup } = createFormHook({
   fieldContext,
@@ -20,6 +21,7 @@ export const { useAppForm, withForm, withFieldGroup } = createFormHook({
     select: SelectField,
     resource: ResourceField,
     checkbox: CheckboxField,
+    textCheckbox: TextCheckboxField,
   },
   formComponents: {
     start: StartButton,

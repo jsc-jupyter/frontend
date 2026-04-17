@@ -28,10 +28,12 @@ function SelectField({ label, options }: SelectFieldProps) {
   const field = useFieldContext<string>();
   const derivedValue = field.state.value;
   console.log("SelectField render: ", { label, options, derivedValue });
-  
+
   useEffect(() => {
     if (field.state.value === undefined) {
-      console.warn(`Field value is undefined on mount. Setting to first available option.`);
+      console.warn(
+        `Field value is undefined on mount. Setting to first available option.`,
+      );
       const firstOption = options.options[0];
       if (firstOption) {
         field.handleChange(firstOption);
@@ -42,7 +44,7 @@ function SelectField({ label, options }: SelectFieldProps) {
         `Selected value "${derivedValue}" is in inactive options. Resetting selection.`,
       );
     }
-  }, );
+  });
 
   const handleChange = (value: string) => {
     field.handleChange(value);

@@ -1,8 +1,6 @@
-import React, { useContext, useMemo } from "react";
+import React, { useMemo } from "react";
 import type { BaseElementProps } from "../types";
 import "./FlavorInfo.css";
-import { useConfigById } from "@/stores/hooks";
-import { JupyterlabIDContext } from "@/stores";
 import { useCombinedStore } from "@/stores/combinedStore";
 import FlavorBar from "./FlavorBar";
 
@@ -21,11 +19,15 @@ interface Flavors {
 interface FlavorInfoProps extends BaseElementProps {
   children?: React.ReactNode;
   flavors?: Flavors;
+  system: string;
 }
 
-const FlavorInfo = ({ elementId, flavors, children }: FlavorInfoProps) => {
-  const configIndex = useContext(JupyterlabIDContext);
-  const system = useConfigById(configIndex)?.system;
+const FlavorInfo = ({
+  elementId,
+  flavors,
+  children,
+  system,
+}: FlavorInfoProps) => {
   const kubeOutpostFlavors = useCombinedStore(
     (state) => state.kubeOutpostFlavors,
   );
